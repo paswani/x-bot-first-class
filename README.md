@@ -19,6 +19,6 @@ It is advisalbe to also install the bot channel emulator. You can download it fr
 
 To review purpose of the competition, rules and objectives, please check https://confluence.infusion.com/display/innovationpractices/Bot+Competition+Plan.
 
-Before getting started, I'd suggest you review the recordings of the two training sessions the Jeremy Bibby did for us. You can find the recordings in the slack channel:
+Before getting started, I'd suggest you review the recordings of the two training sessions the Jeremy Bibby did for us. You can find the recordings in the slack channel https://infusion.slack.com/messages/C4G0XG1MY/:
 
 	[TBD]
