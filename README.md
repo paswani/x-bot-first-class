@@ -13,6 +13,8 @@ To get going on the coding site, do the following:
   - Save the zip file to your Visual Studio 2015 templates directory which is traditionally in "%USERPROFILE%\Documents\Visual Studio 2015\Templates\ProjectTemplates\Visual C#\"
 3. Download the repo and get going. 
 
+It is advisalbe to also install the bot channel emulator. You can download it from https://emulator.botframework.com/.
+
 # Resources
 
 To review purpose of the competition, rules and objectives, please check https://confluence.infusion.com/display/innovationpractices/Bot+Competition+Plan.
