@@ -15,4 +15,8 @@ To get going on the coding site, do the following:
 
 # Resources
 
-Before getting started, I'd suggest you review the recordings of the two training sessions the Jeremy Bibby did for us. You can find the recordings in the ... [TBD]
+To review purpose of the competition, rules and objectives, please check https://confluence.infusion.com/display/innovationpractices/Bot+Competition+Plan.
+
+Before getting started, I'd suggest you review the recordings of the two training sessions the Jeremy Bibby did for us. You can find the recordings in the slack channel:
+
+	[TBD]
