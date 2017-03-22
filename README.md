@@ -1,5 +1,5 @@
 # Overview
-This repo contains the code for the Houston team's participation in Infusions 2017 intelligent bot contest. 
+This repo contains the code for the Houston team's participation in Infusions 2017 intelligent bot contest. Stay in touch with teh team via the [Slack X-Bot channel](https://infusion.slack.com/messages/G4MFDSY1F/convo/C4G0XG1MY-1490023055.466035/) 
 
 # Pre-requisites and instructions
 To join the team and gain access, contact Thor Schueler to be added to the repo.
