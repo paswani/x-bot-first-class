@@ -7,10 +7,19 @@ using Microsoft.Bot.Connector;
 
 namespace X_Bot_First_Class.Dialogs
 {
+    /// <summary>
+    /// Root dialog class
+    /// </summary>
     [LuisModel("660d5761-1f2f-4e2c-8d30-e937614ea94f", "b42a61226cd749b693bec5142aafc557")]
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
+        /// <summary>
+        /// Welcome intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
         [LuisIntent("Welcome")]
         public async Task Welcome(IDialogContext context, LuisResult result)
         {
@@ -29,6 +38,12 @@ namespace X_Bot_First_Class.Dialogs
             }
         }
 
+        /// <summary>
+        /// Callback for name prompt.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
         private async Task ResumeAfterNamePromptAsync(IDialogContext context, IAwaitable<string> result)
         {
             var userData = await GetUserData(context);
@@ -36,21 +51,37 @@ namespace X_Bot_First_Class.Dialogs
             var name = await result;
             if (!string.IsNullOrEmpty(name))
             {
+                // persist the data for the current user
                 userData.SetProperty<string>("name", name);
                 await context.PostAsync(string.Format(Resources.mgsWelcomeWithName, name));
             }
         }
 
+        /// <summary>
+        /// Gets the activity.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The activity.</returns>
         private Activity GetActivity(IDialogContext context)
         {
             return (Activity)context.Activity;
         }
 
+        /// <summary>
+        /// Gets the state client.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The state client.</returns>
         private StateClient GetStateClient(IDialogContext context)
         {
             return GetActivity(context).GetStateClient();
         }
 
+        /// <summary>
+        /// Gets the user data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The user data.</returns>
         private async Task<BotData> GetUserData(IDialogContext context)
         {
             var activity = GetActivity(context);
