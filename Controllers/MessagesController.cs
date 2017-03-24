@@ -28,6 +28,11 @@ namespace X_Bot_First_Class
             return response;
         }
 
+        /// <summary>
+        /// Handles the system message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns>Activity.</returns>
         private Activity HandleSystemMessage(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
@@ -48,7 +53,7 @@ namespace X_Bot_First_Class
             }
             else if (message.Type == ActivityTypes.Typing)
             {
-                // Handle knowing tha the user is typing
+                // Handle knowing that the user is typing
             }
             else if (message.Type == ActivityTypes.Ping)
             {
