@@ -79,6 +79,33 @@ namespace X_Bot_First_Class {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Goodbye!.
+        /// </summary>
+        internal static string msgGoodbye {
+            get {
+                return ResourceManager.GetString("msgGoodbye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I&apos;m sorry. I didn&apos;t catch that..
+        /// </summary>
+        internal static string msgIDidntCatchThat {
+            get {
+                return ResourceManager.GetString("msgIDidntCatchThat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK. From now on I will call you {0}..
+        /// </summary>
+        internal static string msgIWillCallYou {
+            get {
+                return ResourceManager.GetString("msgIWillCallYou", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello. My name is Rachael. With whom do I have the pleasure of chatting with?.
         /// </summary>
         internal static string msgWelcome {
@@ -93,6 +120,15 @@ namespace X_Bot_First_Class {
         internal static string msgWelcomeBack {
             get {
                 return ResourceManager.GetString("msgWelcomeBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK. What should I call you?.
+        /// </summary>
+        internal static string msgWhatShouldICallYou {
+            get {
+                return ResourceManager.GetString("msgWhatShouldICallYou", resourceCulture);
             }
         }
     }

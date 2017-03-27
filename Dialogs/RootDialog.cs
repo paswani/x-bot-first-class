@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
 
 namespace X_Bot_First_Class.Dialogs
 {
@@ -23,9 +24,8 @@ namespace X_Bot_First_Class.Dialogs
         [LuisIntent("Welcome")]
         public async Task Welcome(IDialogContext context, LuisResult result)
         {
-            var userData = await GetUserData(context);
-
-            var name = userData.GetProperty<string>("name");
+            var name = string.Empty;
+            context.UserData.TryGetValue<string>("name", out name);
 
             if (string.IsNullOrEmpty(name))
             {
@@ -39,6 +39,60 @@ namespace X_Bot_First_Class.Dialogs
         }
 
         /// <summary>
+        /// Change Name intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        [LuisIntent("ChangeName")]
+        public async Task ChangeName(IDialogContext context, LuisResult result)
+        {
+            List<EntityRecommendation> nameEntities = null;
+            if (result.TryFindEntities("Name", out nameEntities))
+            {
+                var name = "";
+                var nameList = nameEntities.ConcatEntities(" ").Split(' ').ToList<string>();
+                nameList.ForEach(str =>
+                {
+                    name += string.Concat(str[0].ToString().ToUpper(), str.Substring(1), " ");
+                });
+                name = name.Trim();
+
+                context.UserData.SetValue<string>("name", name);
+                await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
+            }
+            else
+            {
+                // prompt for the user's name
+                PromptDialog.Text(context, ResumeAfterNameChangeAsync, Resources.msgWhatShouldICallYou);
+            }
+        }
+
+        /// <summary>
+        /// Goodbye intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        [LuisIntent("Goodbye")]
+        public async Task Goodbye(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync(Resources.msgGoodbye);
+        }
+
+        /// <summary>
+        /// No intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        [LuisIntent("")]
+        public async Task None(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync(Resources.msgIDidntCatchThat);
+        }
+
+        /// <summary>
         /// Callback for name prompt.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -46,47 +100,30 @@ namespace X_Bot_First_Class.Dialogs
         /// <returns></returns>
         private async Task ResumeAfterNamePromptAsync(IDialogContext context, IAwaitable<string> result)
         {
-            var userData = await GetUserData(context);
-
             var name = await result;
             if (!string.IsNullOrEmpty(name))
             {
                 // persist the data for the current user
-                userData.SetProperty<string>("name", name);
+                context.UserData.SetValue<string>("name", name);
                 await context.PostAsync(string.Format(Resources.mgsWelcomeWithName, name));
             }
         }
 
         /// <summary>
-        /// Gets the activity.
+        /// Callback for name change.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The activity.</returns>
-        private Activity GetActivity(IDialogContext context)
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        private async Task ResumeAfterNameChangeAsync(IDialogContext context, IAwaitable<string> result)
         {
-            return (Activity)context.Activity;
-        }
-
-        /// <summary>
-        /// Gets the state client.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>The state client.</returns>
-        private StateClient GetStateClient(IDialogContext context)
-        {
-            return GetActivity(context).GetStateClient();
-        }
-
-        /// <summary>
-        /// Gets the user data.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>The user data.</returns>
-        private async Task<BotData> GetUserData(IDialogContext context)
-        {
-            var activity = GetActivity(context);
-            var stateClient = GetStateClient(context);
-            return await stateClient.BotState.GetUserDataAsync(activity.ChannelId, activity.From.Id);
+            var name = await result;
+            if (!string.IsNullOrEmpty(name))
+            {
+                // persist the data for the current user
+                context.UserData.SetValue<string>("name", name);
+                await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
+            }
         }
     }
 }

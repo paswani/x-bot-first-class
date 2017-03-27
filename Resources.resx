@@ -123,10 +123,22 @@
   <data name="msgGetName" xml:space="preserve">
     <value>What name should I call you by?</value>
   </data>
+  <data name="msgGoodbye" xml:space="preserve">
+    <value>Goodbye!</value>
+  </data>
+  <data name="msgIDidntCatchThat" xml:space="preserve">
+    <value>I'm sorry. I didn't catch that.</value>
+  </data>
+  <data name="msgIWillCallYou" xml:space="preserve">
+    <value>OK. From now on I will call you {0}.</value>
+  </data>
   <data name="msgWelcome" xml:space="preserve">
     <value>Hello. My name is Rachael. With whom do I have the pleasure of chatting with?</value>
   </data>
   <data name="msgWelcomeBack" xml:space="preserve">
     <value>Welcome back, {0}! How can I help you?</value>
+  </data>
+  <data name="msgWhatShouldICallYou" xml:space="preserve">
+    <value>OK. What should I call you?</value>
   </data>
 </root>
