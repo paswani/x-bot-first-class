@@ -1,84 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
+using X_Bot_First_Class.Common;
 
 namespace X_Bot_First_Class.Dialogs
 {
     /// <summary>
     /// Root dialog class
     /// </summary>
-    [LuisModel("660d5761-1f2f-4e2c-8d30-e937614ea94f", "b42a61226cd749b693bec5142aafc557")]
+    [LuisModel("e82853ef-0ac6-4124-9e80-3e71057382a2", "08107661360644ab8532afffc187bbac")]
     [Serializable]
-    public class RootDialog : LuisDialog<object>
+    public class RootDialog : LuisDialogBase<object>
     {
-        /// <summary>
-        /// Welcome intent.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="result">The result.</param>
-        /// <returns></returns>
-        [LuisIntent("Welcome")]
-        public async Task Welcome(IDialogContext context, LuisResult result)
-        {
-            var name = string.Empty;
-            context.UserData.TryGetValue<string>("name", out name);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                // prompt for the user's name
-                PromptDialog.Text(context, ResumeAfterNamePromptAsync, Resources.msgWelcome);
-            }
-            else
-            {
-                await context.PostAsync(string.Format(Resources.msgWelcomeBack, name));
-            }
-        }
-
-        /// <summary>
-        /// Change Name intent.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="result">The result.</param>
-        /// <returns></returns>
-        [LuisIntent("ChangeName")]
-        public async Task ChangeName(IDialogContext context, LuisResult result)
-        {
-            List<EntityRecommendation> nameEntities = null;
-            if (result.TryFindEntities("Name", out nameEntities))
-            {
-                var name = "";
-                var nameList = nameEntities.ConcatEntities(" ").Split(' ').ToList<string>();
-                nameList.ForEach(str =>
-                {
-                    name += string.Concat(str[0].ToString().ToUpper(), str.Substring(1), " ");
-                });
-                name = name.Trim();
-
-                context.UserData.SetValue<string>("name", name);
-                await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
-            }
-            else
-            {
-                // prompt for the user's name
-                PromptDialog.Text(context, ResumeAfterNameChangeAsync, Resources.msgWhatShouldICallYou);
-            }
-        }
-
-        /// <summary>
-        /// Goodbye intent.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="result">The result.</param>
-        /// <returns></returns>
-        [LuisIntent("Goodbye")]
-        public async Task Goodbye(IDialogContext context, LuisResult result)
-        {
-            await context.PostAsync(Resources.msgGoodbye);
-        }
+        private string _userToBot;
+        private bool _serviceUrlSet = false;
 
         /// <summary>
         /// No intent.
@@ -87,43 +26,65 @@ namespace X_Bot_First_Class.Dialogs
         /// <param name="result">The result.</param>
         /// <returns></returns>
         [LuisIntent("")]
+        [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync(Resources.msgIDidntCatchThat);
-        }
+            var factory = new LuisDialogFactory();
+            var dialog = await factory.Create(result.Query);
 
-        /// <summary>
-        /// Callback for name prompt.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="result">The result.</param>
-        /// <returns></returns>
-        private async Task ResumeAfterNamePromptAsync(IDialogContext context, IAwaitable<string> result)
-        {
-            var name = await result;
-            if (!string.IsNullOrEmpty(name))
+            if (dialog != null)
             {
-                // persist the data for the current user
-                context.UserData.SetValue<string>("name", name);
-                await context.PostAsync(string.Format(Resources.mgsWelcomeWithName, name));
+                var message = context.MakeMessage();
+                message.Text = _userToBot;
+
+                await context.Forward(dialog, ResumeAfterForward, message, CancellationToken.None);
+            }
+            else
+            {
+                await context.PostAsync(Resources.msgIDidntCatchThat);
+                context.Wait(MessageReceived);
             }
         }
 
         /// <summary>
-        /// Callback for name change.
+        /// Resumes the after forward.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="result">The result.</param>
         /// <returns></returns>
-        private async Task ResumeAfterNameChangeAsync(IDialogContext context, IAwaitable<string> result)
+        private async Task ResumeAfterForward(IDialogContext context, IAwaitable<object> result)
         {
-            var name = await result;
-            if (!string.IsNullOrEmpty(name))
+            var message = await result;
+            if (string.IsNullOrEmpty(message.ToString()))
             {
-                // persist the data for the current user
-                context.UserData.SetValue<string>("name", name);
-                await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
+                context.Wait(MessageReceived);
             }
+            else
+            {
+                await None(context, new LuisResult()); //the second dialog didn't understand the command
+            }
+        }
+
+        /// <summary>
+        /// Messages the received.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
+        {
+            var message = await item;
+
+            //No way to get the message in the LuisIntent methods so saving it here
+            _userToBot = message.Text.ToLowerInvariant();
+
+            if (!_serviceUrlSet)
+            {
+                context.PrivateConversationData.SetValue("ServiceUrl", message.ServiceUrl);
+                _serviceUrlSet = true;
+            }
+
+            await base.MessageReceived(context, item);
         }
     }
 }
