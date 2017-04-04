@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Dialogs;
 
 namespace X_Bot_First_Class
 {
@@ -23,19 +24,25 @@ namespace X_Bot_First_Class
             }
         }
 
-        public async Task<LuisDialogBase<object>> Create(string query)
+        public async Task<LuisDialogBase<object>> Create(string query, ConversationType conversationType)
         {
-            query = query.ToLowerInvariant();
-            EnsureDialogs();
-
-            foreach (var resourceDialog in Dialogs)
+            switch (conversationType)
             {
-                if (await resourceDialog.CanHandle(query))
-                {
-                    return resourceDialog;
-                }
+                case ConversationType.SmsFirstDayReview:
+                    return Dialogs.FirstOrDefault(dialog => dialog is FirstDayReviewDialog);
+                default:
+                    query = query.ToLowerInvariant();
+                    EnsureDialogs();
+
+                    foreach (var resourceDialog in Dialogs)
+                    {
+                        if (await resourceDialog.CanHandle(query))
+                        {
+                            return resourceDialog;
+                        }
+                    }
+                    return null;
             }
-            return null;
         }
 
         private static void EnsureDialogs()

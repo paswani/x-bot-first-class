@@ -29,9 +29,12 @@ namespace X_Bot_First_Class.Dialogs
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            var factory = new LuisDialogFactory();
-            var dialog = await factory.Create(result.Query);
+            ConversationType conversationType;
+            context.UserData.TryGetValue<ConversationType>("conversationType", out conversationType);
 
+            var factory = new LuisDialogFactory();
+            var dialog = await factory.Create(result.Query, conversationType);
+            await context.PostAsync(conversationType.ToString());
             if (dialog != null)
             {
                 var message = context.MakeMessage();
