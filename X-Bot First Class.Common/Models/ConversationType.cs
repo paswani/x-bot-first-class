@@ -11,6 +11,6 @@ namespace X_Bot_First_Class.Common
     /// </summary>
     public enum ConversationType
     {
-        SmsFirstDayReview = 1
+        FirstDayReview = 1
     }
 }

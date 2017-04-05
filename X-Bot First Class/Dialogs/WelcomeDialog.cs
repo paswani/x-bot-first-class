@@ -37,6 +37,8 @@ namespace X_Bot_First_Class.Dialogs
             {
                 await context.PostAsync(string.Format(Resources.msgWelcomeBack, name));
             }
+
+            context.Done<string>(null);
         }
 
         /// <summary>
@@ -67,6 +69,8 @@ namespace X_Bot_First_Class.Dialogs
                 // prompt for the user's name
                 PromptDialog.Text(context, ResumeAfterNameChangeAsync, Resources.msgWhatShouldICallYou);
             }
+
+            context.Done<string>(null);
         }
 
         /// <summary>
@@ -79,6 +83,8 @@ namespace X_Bot_First_Class.Dialogs
         public async Task Goodbye(IDialogContext context, LuisResult result)
         {
             await context.PostAsync(Resources.msgGoodbye);
+
+            context.Done<string>(null);
         }
 
         /// <summary>

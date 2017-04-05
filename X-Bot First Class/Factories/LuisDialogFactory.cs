@@ -8,10 +8,22 @@ using X_Bot_First_Class.Dialogs;
 
 namespace X_Bot_First_Class
 {
+    /// <summary>
+    /// Public class to create luis dialogs
+    /// </summary>
     public class LuisDialogFactory
     {
+        /// <summary>
+        /// The dialogs
+        /// </summary>
         private static List<LuisDialogBase<object>> _dialogs = null;
 
+        /// <summary>
+        /// Gets the dialogs.
+        /// </summary>
+        /// <value>
+        /// The dialogs.
+        /// </value>
         private static List<LuisDialogBase<object>> Dialogs
         {
             get
@@ -24,15 +36,21 @@ namespace X_Bot_First_Class
             }
         }
 
+        /// <summary>
+        /// Creates the specified query.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="conversationType">Type of the conversation.</param>
+        /// <returns></returns>
         public async Task<LuisDialogBase<object>> Create(string query, ConversationType conversationType)
         {
+            EnsureDialogs();
             switch (conversationType)
             {
-                case ConversationType.SmsFirstDayReview:
+                case ConversationType.FirstDayReview:
                     return Dialogs.FirstOrDefault(dialog => dialog is FirstDayReviewDialog);
                 default:
                     query = query.ToLowerInvariant();
-                    EnsureDialogs();
 
                     foreach (var resourceDialog in Dialogs)
                     {
@@ -45,6 +63,9 @@ namespace X_Bot_First_Class
             }
         }
 
+        /// <summary>
+        /// Ensures the dialogs.
+        /// </summary>
         private static void EnsureDialogs()
         {
             _dialogs = new List<LuisDialogBase<object>>();

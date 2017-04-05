@@ -34,7 +34,7 @@ namespace X_Bot_First_Class.Dialogs
 
             var factory = new LuisDialogFactory();
             var dialog = await factory.Create(result.Query, conversationType);
-            await context.PostAsync(conversationType.ToString());
+
             if (dialog != null)
             {
                 var message = context.MakeMessage();
@@ -58,7 +58,7 @@ namespace X_Bot_First_Class.Dialogs
         private async Task ResumeAfterForward(IDialogContext context, IAwaitable<object> result)
         {
             var message = await result;
-            if (string.IsNullOrEmpty(message.ToString()))
+            if (string.IsNullOrEmpty(message?.ToString()))
             {
                 context.Wait(MessageReceived);
             }

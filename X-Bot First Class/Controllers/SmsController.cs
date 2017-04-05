@@ -23,23 +23,44 @@ namespace X_Bot_First_Class
             var data = JsonConvert.DeserializeObject<SmsPayload>(dataString);
             if (data == null) return Request.CreateResponse(HttpStatusCode.BadRequest);
 
-            string fromId = data.FromId ?? "+18327722087";
+            // send the sms
+            var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
+            var response = await SendSms(data, credentials);
+
+            // save the conversation state so when the recipient responds we know in what context they replied in
+            var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
+            var userData = await stateClient.BotState.GetUserDataAsync("sms", data.ToId);
+            userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
+            await stateClient.BotState.SetUserDataAsync("sms", data.ToId, userData);
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+        /// <summary>
+        /// Send sms
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
+        private async Task<ResourceResponse> SendSms(SmsPayload data, MicrosoftAppCredentials credentials)
+        {
+            string fromId = data.FromId ?? ConfigurationManager.AppSettings["Twilio_PhoneNumber"];
             string fromName = data.FromName ?? "ExpressBot";
             string toId = data.ToId;
             string toName = data.ToName;
             string locale = data.ToName ?? "en-US";
             string text = data.Text;
 
-            var serviceUrl = new Uri("https://sms.botframework.com");
+            var serviceUrl = new Uri(ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]);
             var botAccount = new ChannelAccount(fromId, fromName);
             var userAccount = new ChannelAccount(toId, toName);
 
+            // trust the service url if it is not already trusted
             if (!MicrosoftAppCredentials.IsTrustedServiceUrl(serviceUrl.ToString()))
             {
                 MicrosoftAppCredentials.TrustServiceUrl(serviceUrl.ToString());
             }
 
-            var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
             var connector = new ConnectorClient(serviceUrl, credentials);
 
             var conversation = await connector.Conversations.CreateDirectConversationAsync(botAccount, userAccount);
@@ -50,14 +71,7 @@ namespace X_Bot_First_Class
             message.Conversation = new ConversationAccount(false, conversation.Id);
             message.Text = text;
             message.Locale = locale;
-            var conv = await connector.Conversations.SendToConversationAsync((Activity)message);
-
-            var state = new StateClient(new Uri("https://state.botframework.com"), credentials);
-            var userData = await state.BotState.GetUserDataAsync("sms", userAccount.Id);
-            userData.SetProperty<string>("conversationType", ConversationType.SmsFirstDayReview.ToString());
-            await state.BotState.SetUserDataAsync("sms", userAccount.Id, userData);
-
-            return Request.CreateResponse(HttpStatusCode.OK, conv);
+            return await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }
 }

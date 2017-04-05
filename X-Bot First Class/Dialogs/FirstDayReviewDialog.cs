@@ -16,7 +16,6 @@ namespace X_Bot_First_Class.Dialogs
     [Serializable]
     public class FirstDayReviewDialog : LuisDialogBase<object>
     {
-
         /// <summary>
         /// No intent.
         /// </summary>
@@ -32,6 +31,8 @@ namespace X_Bot_First_Class.Dialogs
             // do sentiment analysis and give appropriate response
 
             await context.PostAsync("first day review");
+
+            context.Done<string>(null);
         }
     }
 }

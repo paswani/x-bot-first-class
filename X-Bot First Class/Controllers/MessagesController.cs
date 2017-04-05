@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using X_Bot_First_Class.Common;
 
 namespace X_Bot_First_Class
 {
@@ -25,6 +24,7 @@ namespace X_Bot_First_Class
             {
                 HandleSystemMessage(activity);
             }
+           
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
