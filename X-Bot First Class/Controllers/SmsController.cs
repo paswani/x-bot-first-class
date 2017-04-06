@@ -25,6 +25,11 @@ namespace X_Bot_First_Class
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
+            if (!phoneNumber.StartsWith("+"))
+            {
+                phoneNumber = string.Concat("+", phoneNumber);
+            }
+
             // send the sms
             var smsPayload = new SmsPayload()
             {
