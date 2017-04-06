@@ -63,13 +63,13 @@ namespace X_Bot_First_Class.Dialogs
 
                 context.UserData.SetValue<string>("name", name);
                 await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
+
+                context.Done<string>(null);
             }
             else
             {
                 // prompt for the user's name
                 PromptDialog.Text(context, ResumeAfterNameChangeAsync, Resources.msgWhatShouldICallYou);
-
-                context.Done<string>(null);
             }
         }
 

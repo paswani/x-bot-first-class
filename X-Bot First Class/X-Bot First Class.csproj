@@ -110,6 +110,10 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WildMouse.Unearth.Cognitive.TextAnalytics, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WildMouse.Unearth.Cognitive.TextAnalytics.1.1.0\lib\net452\WildMouse.Unearth.Cognitive.TextAnalytics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.htm" />

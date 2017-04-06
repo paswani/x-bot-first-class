@@ -18,9 +18,9 @@ namespace X_Bot_First_Class
         /// </summary>
         [HttpGet]
         [Route("api/sms/firstdayreview")]
-        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string name, string company)
+        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string name, string company, string recruiterName)
         {
-            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(company))
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(company) || string.IsNullOrEmpty(recruiterName))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
@@ -29,7 +29,7 @@ namespace X_Bot_First_Class
             var smsPayload = new SmsPayload()
             {
                 ToId = phoneNumber,
-                Text = string.Format("Hello, {0}!. How was your first day at {1}?", name, company)
+                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", name, company)
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
             var response = await SendSms(smsPayload, credentials);
@@ -38,6 +38,7 @@ namespace X_Bot_First_Class
             var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
             var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
             userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
+            userData.SetProperty<string>("recruiterName", recruiterName);
             await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
