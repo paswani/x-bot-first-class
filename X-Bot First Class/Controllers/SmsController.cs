@@ -16,22 +16,29 @@ namespace X_Bot_First_Class
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
-        [HttpPost]
+        [HttpGet]
         [Route("api/sms/firstdayreview")]
-        public async Task<HttpResponseMessage> FirstDayReview([FromBody]string dataString)
+        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string name, string company)
         {
-            var data = JsonConvert.DeserializeObject<SmsPayload>(dataString);
-            if (data == null) return Request.CreateResponse(HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(company))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
 
             // send the sms
+            var smsPayload = new SmsPayload()
+            {
+                ToId = phoneNumber,
+                Text = string.Format("Hello, {0}!. How was your first day at {1}?", name, company)
+            };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
-            var response = await SendSms(data, credentials);
+            var response = await SendSms(smsPayload, credentials);
 
             // save the conversation state so when the recipient responds we know in what context they replied in
             var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
-            var userData = await stateClient.BotState.GetUserDataAsync("sms", data.ToId);
+            var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
             userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
-            await stateClient.BotState.SetUserDataAsync("sms", data.ToId, userData);
+            await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
