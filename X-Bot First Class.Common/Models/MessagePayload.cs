@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace X_Bot_First_Class.Common
 {
@@ -74,5 +69,14 @@ namespace X_Bot_First_Class.Common
         /// The service URL.
         /// </value>
         public string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the channel data. This is custom data for specific channels
+        /// <see cref="https://docs.botframework.com/en-us/csharp/builder/sdkreference/channels.html"/>
+        /// </summary>
+        /// <value>
+        /// The channel data.
+        /// </value>
+        public dynamic ChannelData { get; set; }
     }
 }

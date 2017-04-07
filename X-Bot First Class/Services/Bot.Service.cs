@@ -18,15 +18,8 @@ namespace X_Bot_First_Class.Services
         /// <returns></returns>
         public static async Task<ResourceResponse> SendMessage(MessagePayload data, MicrosoftAppCredentials credentials)
         {
-            string fromId = data.FromId;
-            string fromName = data.FromName ?? "ExpressBot";
-            string toId = data.ToId;
-            string toName = data.ToName;
-            string locale = data.ToName ?? "en-US";
-            string text = data.Text;
-            
-            var botAccount = new ChannelAccount(fromId, fromName);
-            var userAccount = new ChannelAccount(toId, toName);
+            var botAccount = new ChannelAccount(data.FromId, data.FromName ?? "ExpressBot");
+            var userAccount = new ChannelAccount(data.ToId, data.ToName);
 
             // trust the service url if it is not already trusted
             if (!MicrosoftAppCredentials.IsTrustedServiceUrl(data.ServiceUrl))
@@ -42,8 +35,9 @@ namespace X_Bot_First_Class.Services
             message.From = botAccount;
             message.Recipient = userAccount;
             message.Conversation = new ConversationAccount(false, conversation.Id);
-            message.Text = text;
-            message.Locale = locale;
+            message.Text = data.Text;
+            message.Locale = data.ToName ?? "en-US";
+            message.ChannelData = data.ChannelData;
             return await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }
