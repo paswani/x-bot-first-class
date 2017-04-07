@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Dialogs\FirstDayReviewDialog.cs" />
@@ -141,6 +142,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Bot.Service.cs" />
     <Compile Include="Services\Express.Service.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,9 @@
       <Project>{33B8528F-826B-489B-8855-652391320A99}</Project>
       <Name>X-Bot First Class.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

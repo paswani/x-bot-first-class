@@ -61,7 +61,7 @@ namespace X_Bot_First_Class.Dialogs
         private async Task ResumeAfterEmailPromptAsync(IDialogContext context, IAwaitable<string> result)
         {
             var response = await result;
-            if (Regex.Match(response, "[Yes|yes|yea|yeah|ok|sure]").Success)
+            if (Regex.Match(response, "(Yes|yes|yea|yeah|ok|sure)").Success)
             {
                 var recruiter = string.Empty;
                 context.UserData.TryGetValue<string>("recruiterName", out recruiter);

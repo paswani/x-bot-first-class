@@ -10,47 +10,41 @@ using X_Bot_First_Class.Services;
 
 namespace X_Bot_First_Class
 {
-    public class SmsController : ApiController
+    public class EmailController : ApiController
     {
         /// <summary>
-        /// Sends the first day review.
+        /// Sends the rejection notice.
         /// </summary>
-        /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="email">The email.</param>
         /// <param name="name">The name.</param>
-        /// <param name="company">The company.</param>
         /// <param name="recruiterName">Name of the recruiter.</param>
+        /// <param name="job">The job.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/sms/firstdayreview")]
-        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string name, string company, string recruiterName)
+        [Route("api/email/rejectionNotice")]
+        public async Task<HttpResponseMessage> RejectionNotice(string email, string name, string recruiterName, string job)
         {
-            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(company) || string.IsNullOrEmpty(recruiterName))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(recruiterName) || string.IsNullOrEmpty(job))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            if (!phoneNumber.StartsWith("+"))
-            {
-                phoneNumber = string.Concat("+", phoneNumber);
-            }
-
-            // send the sms
+            // send the email
             var payload = new MessagePayload()
             {
-                FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
-                ToId = phoneNumber,
-                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", name, company),
-                ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
+                ToId = email,
+                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", name),
+                ServiceUrl = ConfigurationManager.AppSettings["BotFramework_EmailServiceUrl"]
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
             var response = await Bot.SendMessage(payload, credentials);
 
             // save the conversation state so when the recipient responds we know in what context they replied in
             var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
-            var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
-            userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
+            var userData = await stateClient.BotState.GetUserDataAsync("email", email);
+            userData.SetProperty<string>("conversationType", ConversationType.RejectionNotice.ToString());
             userData.SetProperty<string>("recruiterName", recruiterName);
-            await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
+            await stateClient.BotState.SetUserDataAsync("email", email, userData);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }

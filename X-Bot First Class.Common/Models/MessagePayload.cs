@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 namespace X_Bot_First_Class.Common
 {
     /// <summary>
-    /// Public class that represents the sms payload
+    /// Public class that represents the message payload
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class SmsPayload
+    public class MessagePayload
     {
         /// <summary>
         /// Gets or sets from identifier.
@@ -66,5 +66,13 @@ namespace X_Bot_First_Class.Common
         ///// </value>
         [JsonProperty("locale")]
         public string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets the service URL.
+        /// </summary>
+        /// <value>
+        /// The service URL.
+        /// </value>
+        public string ServiceUrl { get; set; }
     }
 }

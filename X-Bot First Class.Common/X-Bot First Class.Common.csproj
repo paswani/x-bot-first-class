@@ -90,7 +90,8 @@
   <ItemGroup>
     <Compile Include="Base Classes\LuisDialogBase.cs" />
     <Compile Include="Models\ConversationType.cs" />
-    <Compile Include="Models\SmsPayload.cs" />
+    <Compile Include="Models\MessagePayload.cs" />
+    <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
