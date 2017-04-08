@@ -39,7 +39,7 @@ namespace X_Bot_First_Class
             var filteredJobTitles = jobTitles.Take(3).ToList<string>();
             foreach(var jobTitle in filteredJobTitles)
             {
-                jobSuggestionHtml.Append("<li><a href='#'>" + jobTitles + "</a>");
+                jobSuggestionHtml.Append("<li><a href='#'>" + jobTitle + "</a>");
             }
 
             // send the email
