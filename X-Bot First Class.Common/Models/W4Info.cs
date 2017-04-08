@@ -1,4 +1,7 @@
 ﻿using System;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Builder.FormFlow.Advanced;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,7 @@ namespace X_Bot_First_Class.Common.Models
     /// <summary>
     /// Captures Applicants W4 Data
     /// </summary>
+    [Serializable]
     public class W4Info
     {
         public string FirstName { get; set; }

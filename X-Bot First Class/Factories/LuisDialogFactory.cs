@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Common.Models;
 using X_Bot_First_Class.Dialogs;
 
 namespace X_Bot_First_Class
@@ -42,7 +44,7 @@ namespace X_Bot_First_Class
         /// <param name="query">The query.</param>
         /// <param name="conversationType">Type of the conversation.</param>
         /// <returns></returns>
-        public async Task<LuisDialogBase<object>> Create(string query, ConversationType conversationType)
+        public async Task<IDialog<object>> Create(string query, Applicant a, ConversationType conversationType)
         {
             EnsureDialogs();
             switch (conversationType)
@@ -50,6 +52,7 @@ namespace X_Bot_First_Class
                 case ConversationType.FirstDayReview:
                     return Dialogs.FirstOrDefault(dialog => dialog is FirstDayReviewDialog);
                 case ConversationType.FillOutW4:
+                    return FillW4Dialog.MakeW4Dialog(a);
                 case ConversationType.RejectionNotice:
                     return Dialogs.FirstOrDefault(dialog => dialog is RejectionNoticeDialog);
                 case ConversationType.ScheduleInterview:
