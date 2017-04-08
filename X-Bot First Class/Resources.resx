@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="goodbyeEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\goodbyeEmailTemplate.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="mgsWelcomeWithName" xml:space="preserve">
     <value>Welcome, {0}! How can I help you?</value>
   </data>
@@ -141,8 +145,13 @@
   <data name="msgWhatShouldICallYou" xml:space="preserve">
     <value>OK. What should I call you?</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="rejectionEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\rejectionEmailTemplate.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="suggestionApplyEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\suggestionApplyEmailTemplate.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="thankYouEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\thankYouEmailTemplate.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

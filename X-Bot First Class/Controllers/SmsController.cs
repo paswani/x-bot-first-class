@@ -50,6 +50,7 @@ namespace X_Bot_First_Class
             var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
             userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
             userData.SetProperty<string>("recruiterName", recruiterName);
+            userData.SetProperty<string>("name", name);
             await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
