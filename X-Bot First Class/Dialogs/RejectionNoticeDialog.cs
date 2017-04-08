@@ -43,5 +43,33 @@ namespace X_Bot_First_Class.Dialogs
 
             context.Done<string>(null);
         }
+
+        /// <summary>
+        /// Thank You intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        [LuisIntent("ThankYou")]
+        public async Task ThankYou(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("You are most welcome. Take care!");
+
+            context.Done<string>(null);
+        }
+
+        /// <summary>
+        /// Goodbye intent.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        [LuisIntent("Goodbye")]
+        public async Task Goodbye(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Goodbye!");
+
+            context.Done<string>(null);
+        }
     }
 }
