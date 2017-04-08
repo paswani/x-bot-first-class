@@ -92,8 +92,14 @@
     <Compile Include="Models\Applicant.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ConversationType.cs" />
+    <Compile Include="Models\Distance.cs" />
+    <Compile Include="Models\Job.cs" />
+    <Compile Include="Models\JobSearch.cs" />
+    <Compile Include="Models\JobSearchResult.cs" />
+    <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\MessagePayload.cs" />
     <Compile Include="Models\Sentiment.cs" />
+    <Compile Include="Models\Pin.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\W4Info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

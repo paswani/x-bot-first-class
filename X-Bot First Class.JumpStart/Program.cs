@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using System.Dynamic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
+using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Services;
+using System.Linq;
 
 namespace X_Bot_First_Class.JumpStart
 {
@@ -12,7 +14,7 @@ namespace X_Bot_First_Class.JumpStart
     {
         static void Main(string[] args)
         {
-            SendSms().Wait();
+            SendEmail().Wait();
         }
 
         public static async Task SendSms()
@@ -36,6 +38,34 @@ namespace X_Bot_First_Class.JumpStart
             message.Text = "Hello";
             message.Locale = "en-Us";
             var conv = await connector.Conversations.SendToConversationAsync((Activity)message);
+        }
+
+        public static async Task SendEmail()
+        {
+            var name = "Zubair";
+            var job = "chef";
+
+            var jobTitles = Express.GetJobSuggestions(job);
+
+            var jobSuggestionHtml = new StringBuilder();
+            var filteredJobTitles = jobTitles.Take(3).ToList<string>();
+            foreach (var jobTitle in filteredJobTitles)
+            {
+                jobSuggestionHtml.Append("<li><a href='#'>" + jobTitle + "</a>");
+            }
+
+            // send the email
+            dynamic channelData = new ExpandoObject();
+            channelData.HtmlBody = string.Format(Resources.rejectionEmailTemplate, name, job, filteredJobTitles.Count, jobSuggestionHtml.ToString());
+            channelData.Subject = string.Format("Job Application Response: {0}", job);
+
+            await Bot.SendMessage(new MessagePayload()
+            {
+                FromId = "zubairv85@zubairv.onmicrosoft.com",
+                ToId = "zubairv85@gmail.com",
+                ServiceUrl = "https://email.botframework.com",
+                ChannelData = channelData
+            }, new MicrosoftAppCredentials("c537f444-c2f9-42f3-984d-255fc66d4ef6", "uvQrm1qEMiCtXomcDgpWXcz"));
         }
     }
 }

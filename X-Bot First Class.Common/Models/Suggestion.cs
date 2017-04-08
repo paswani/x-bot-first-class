@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace X_Bot_First_Class.Common.Models
+namespace X_Bot_First_Class.Common
 {
     /// <summary>
     /// Public class representing a suggestion returned by the Express Suggestions API

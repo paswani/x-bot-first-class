@@ -51,6 +51,7 @@ namespace X_Bot_First_Class
                     return Dialogs.FirstOrDefault(dialog => dialog is FirstDayReviewDialog);
                 case ConversationType.FillOutW4:
                 case ConversationType.RejectionNotice:
+                    return Dialogs.FirstOrDefault(dialog => dialog is RejectionNoticeDialog);
                 case ConversationType.ScheduleInterview:
                 default:
                     query = query.ToLowerInvariant();

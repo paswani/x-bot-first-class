@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.Dynamic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Connector;
@@ -29,11 +32,26 @@ namespace X_Bot_First_Class
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
+            // do job matching
+            var jobTitles = Express.GetJobSuggestions(job);
+
+            var jobSuggestionHtml = new StringBuilder();
+            var filteredJobTitles = jobTitles.Take(3).ToList<string>();
+            foreach(var jobTitle in filteredJobTitles)
+            {
+                jobSuggestionHtml.Append("<li><a href='#'>" + jobTitle + "</a>");
+            }
+
             // send the email
+            dynamic channelData = new ExpandoObject();
+            channelData.HtmlBody = string.Format(Resources.rejectionEmailTemplate, name, job, filteredJobTitles.Count, jobSuggestionHtml.ToString());
+            channelData.Subject = string.Format("Job Application Response: {0}", job);
+
             var payload = new MessagePayload()
             {
+                FromId = ConfigurationManager.AppSettings["Office356_Email"],
                 ToId = email,
-                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", name),
+                ChannelData = channelData,
                 ServiceUrl = ConfigurationManager.AppSettings["BotFramework_EmailServiceUrl"]
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);

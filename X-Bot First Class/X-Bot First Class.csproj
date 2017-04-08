@@ -142,6 +142,7 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\rejectionEmailTemplate.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -152,6 +153,7 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Dialogs\FirstDayReviewDialog.cs" />
+    <Compile Include="Dialogs\RejectionNoticeDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\WelcomeDialog.cs" />
     <Compile Include="Extensions\EntityRecommendation.cs" />

@@ -93,10 +93,34 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\X-Bot First Class.Common\X-Bot First Class.Common.csproj">
+      <Project>{33B8528F-826B-489B-8855-652391320A99}</Project>
+      <Name>X-Bot First Class.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\X-Bot First Class\X-Bot First Class.csproj">
+      <Project>{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}</Project>
+      <Name>X-Bot First Class</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rejectionEmailTemplate.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

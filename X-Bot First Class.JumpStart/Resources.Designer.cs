@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace X_Bot_First_Class {
+namespace X_Bot_First_Class.JumpStart {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace X_Bot_First_Class {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("X_Bot_First_Class.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("X_Bot_First_Class.JumpStart.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,13 @@ namespace X_Bot_First_Class {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome, {0}! How can I help you?.
-        /// </summary>
-        internal static string mgsWelcomeWithName {
-            get {
-                return ResourceManager.GetString("mgsWelcomeWithName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What name should I call you by?.
-        /// </summary>
-        internal static string msgGetName {
-            get {
-                return ResourceManager.GetString("msgGetName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Goodbye!.
-        /// </summary>
-        internal static string msgGoodbye {
-            get {
-                return ResourceManager.GetString("msgGoodbye", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to I&apos;m sorry. I didn&apos;t catch that..
-        /// </summary>
-        internal static string msgIDidntCatchThat {
-            get {
-                return ResourceManager.GetString("msgIDidntCatchThat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OK. From now on I will call you {0}..
-        /// </summary>
-        internal static string msgIWillCallYou {
-            get {
-                return ResourceManager.GetString("msgIWillCallYou", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hello. My name is Rachael. With whom do I have the pleasure of chatting with?.
-        /// </summary>
-        internal static string msgWelcome {
-            get {
-                return ResourceManager.GetString("msgWelcome", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Welcome back, {0}! How can I help you?.
-        /// </summary>
-        internal static string msgWelcomeBack {
-            get {
-                return ResourceManager.GetString("msgWelcomeBack", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OK. What should I call you?.
-        /// </summary>
-        internal static string msgWhatShouldICallYou {
-            get {
-                return ResourceManager.GetString("msgWhatShouldICallYou", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;
         ///&lt;body&gt;
         ///  &lt;p&gt;Hello, {{0}},&lt;/p&gt;
+        ///    &lt;br /&gt;
         ///  &lt;p&gt;We regret to inform you that you were not selected for the {{1}} position. Although the position has been filled, we recommend you take a look at the following 3 job positions which require similar skills.&lt;/p&gt;
+        ///    &lt;br /&gt;
         ///  &lt;p&gt;
         ///    &lt;ol&gt;
         ///      &lt;li&gt;
@@ -152,8 +82,7 @@ namespace X_Bot_First_Class {
         ///    &lt;/ol&gt;
         ///  &lt;/p&gt;
         ///&lt;/body&gt;
-        ///&lt;/html&gt;
-        ///.
+        ///&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string rejectionEmailTemplate {
             get {
