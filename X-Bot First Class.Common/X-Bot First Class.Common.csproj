@@ -89,9 +89,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base Classes\LuisDialogBase.cs" />
+    <Compile Include="Models\Applicant.cs" />
+    <Compile Include="Models\Application.cs" />
     <Compile Include="Models\ConversationType.cs" />
     <Compile Include="Models\MessagePayload.cs" />
+    <Compile Include="Models\Sentiment.cs" />
     <Compile Include="Models\Suggestion.cs" />
+    <Compile Include="Models\W4Info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
