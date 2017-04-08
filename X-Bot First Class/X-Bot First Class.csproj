@@ -152,6 +152,7 @@
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
+    <Compile Include="Dialogs\FillW4Dialog.cs" />
     <Compile Include="Dialogs\FirstDayReviewDialog.cs" />
     <Compile Include="Dialogs\RejectionNoticeDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
@@ -189,9 +190,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\X-Bot First Class.Common\X-Bot First Class.Common.csproj">
       <Project>{33b8528f-826b-489b-8855-652391320a99}</Project>

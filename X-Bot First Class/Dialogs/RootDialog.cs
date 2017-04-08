@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
+using X_Bot_First_Class.Factories;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Common.Models;
 
 namespace X_Bot_First_Class.Dialogs
 {
@@ -32,8 +35,44 @@ namespace X_Bot_First_Class.Dialogs
             ConversationType conversationType;
             context.UserData.TryGetValue<ConversationType>("conversationType", out conversationType);
 
+            // attempt to obtain applicant info
+            Applicant a = null;
+            switch (context.Activity.ChannelId)
+            {
+                case "sms":
+                    a = await ApplicantFactory.GetApplicantByPhone(context.Activity.From.Id);
+                    break;
+                case "skype":
+                case "email":
+                    a = await ApplicantFactory.GetApplicantByEmail(context.Activity.From.Id);
+                    break;
+                case "emulator":
+                    a = await ApplicantFactory.GetApplicantByPhone("1-504-813-3964");
+                    break;
+                default:
+                    throw new Exception($"Unsupported channel type {context.Activity.ChannelId} in Root Dialog.");
+            }
+            if (a == null) {
+                a = new Applicant();
+                switch (context.Activity.ChannelId)
+                {
+                    case "sms":
+                        a.Phone = context.Activity.From.Id;
+                        break;
+                    case "skype":
+                    case "email":
+                        a.Email = context.Activity.From.Id;
+                        a.Phone = "1-713-000-0000";
+                        break;
+                }
+                // need logic at some point to obtain phone number when in skype/email channel and email when in SMS channel
+            }
+            if (conversationType == ConversationType.None && a.Applications.Count > 0) {
+                conversationType = a.Applications.First().Value.State;
+            }
+
             var factory = new LuisDialogFactory();
-            var dialog = await factory.Create(result.Query, conversationType);
+            var dialog = await factory.Create(result.Query, a, conversationType);
 
             if (dialog != null)
             {
