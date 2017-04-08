@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Connector;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Common.Models;
+using X_Bot_First_Class.Factories;
 using X_Bot_First_Class.Services;
 
 namespace X_Bot_First_Class
@@ -25,15 +27,19 @@ namespace X_Bot_First_Class
         /// <returns></returns>
         [HttpGet]
         [Route("api/email/rejectionNotice")]
-        public async Task<HttpResponseMessage> RejectionNotice(string email, string name, string recruiterName, string job)
+        public async Task<HttpResponseMessage> RejectionNotice(string email, string jobId)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(recruiterName) || string.IsNullOrEmpty(job))
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(jobId)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            // find application
+            Application app = null;
+            Applicant a = await ApplicantFactory.GetApplicantByEmail(email);
+            if (a == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (!a.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
+            app = a.Applications[jobId];
 
             // do job matching
-            var jobTitles = Express.GetJobSuggestions(job);
+            var jobTitles = Express.GetJobSuggestions(app.Title);
 
             var jobSuggestionHtml = new StringBuilder();
             var filteredJobTitles = jobTitles.Take(3).ToList<string>();
@@ -44,8 +50,8 @@ namespace X_Bot_First_Class
 
             // send the email
             dynamic channelData = new ExpandoObject();
-            channelData.HtmlBody = string.Format(Resources.rejectionEmailTemplate, name, job, filteredJobTitles.Count, jobSuggestionHtml.ToString());
-            channelData.Subject = string.Format("Job Application Response: {0}", job);
+            channelData.HtmlBody = string.Format(Resources.rejectionEmailTemplate, a.Name, app.Title, filteredJobTitles.Count, jobSuggestionHtml.ToString());
+            channelData.Subject = string.Format("Job Application Response: {0}", app.Title);
 
             var payload = new MessagePayload()
             {
@@ -58,11 +64,8 @@ namespace X_Bot_First_Class
             var response = await Bot.SendMessage(payload, credentials);
 
             // save the conversation state so when the recipient responds we know in what context they replied in
-            var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
-            var userData = await stateClient.BotState.GetUserDataAsync("email", email);
-            userData.SetProperty<string>("conversationType", ConversationType.RejectionNotice.ToString());
-            userData.SetProperty<string>("recruiterName", recruiterName);
-            await stateClient.BotState.SetUserDataAsync("email", email, userData);
+            app.State = ConversationType.RejectionNotice;
+            await ApplicantFactory.PersistApplicant(a);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }

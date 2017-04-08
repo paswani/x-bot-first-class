@@ -98,6 +98,7 @@
     <Compile Include="Models\JobSearchResult.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\MessagePayload.cs" />
+    <Compile Include="Models\Recruiter.cs" />
     <Compile Include="Models\Sentiment.cs" />
     <Compile Include="Models\Pin.cs" />
     <Compile Include="Models\Suggestion.cs" />

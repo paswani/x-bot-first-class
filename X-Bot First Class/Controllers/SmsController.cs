@@ -25,35 +25,31 @@ namespace X_Bot_First_Class
         /// <returns></returns>
         [HttpGet]
         [Route("api/sms/firstdayreview")]
-        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string name, string company, string recruiterName)
+        public async Task<HttpResponseMessage> FirstDayReview(string phoneNumber, string jobId)
         {
-            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(company) || string.IsNullOrEmpty(recruiterName))
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(jobId)) return Request.CreateResponse(HttpStatusCode.BadRequest);
 
-            if (!phoneNumber.StartsWith("+"))
-            {
-                phoneNumber = string.Concat("+", phoneNumber);
-            }
+            // find application
+            Application app = null;
+            Applicant a = await ApplicantFactory.GetApplicantByPhone(phoneNumber);
+            if (a == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (!a.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
+            app = a.Applications[jobId];
 
-            // send the sms
+            if (!phoneNumber.StartsWith("+")) phoneNumber = string.Concat("+", phoneNumber);
             var payload = new MessagePayload()
             {
                 FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
                 ToId = phoneNumber,
-                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", name, company),
+                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", a.Name, app.Company),
                 ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
             var response = await Bot.SendMessage(payload, credentials);
 
             // save the conversation state so when the recipient responds we know in what context they replied in
-            var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
-            var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
-            userData.SetProperty<string>("conversationType", ConversationType.FirstDayReview.ToString());
-            userData.SetProperty<string>("recruiterName", recruiterName);
-            await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
+            app.State = ConversationType.FirstDayReview;
+            await ApplicantFactory.PersistApplicant(a);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }

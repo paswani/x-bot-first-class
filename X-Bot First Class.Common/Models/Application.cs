@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace X_Bot_First_Class.Common.Models
 {
     /// <summary>
-    /// Representa a Job Application
+    /// Represents a a Job Application
     /// </summary>
     public class Application
     {
@@ -21,6 +21,7 @@ namespace X_Bot_First_Class.Common.Models
         public DateTime? Accepted { get; set; }
         public DateTime? Starting { get; set; }
         public List<Sentiment> SentimentData { get; set; }
+        public Recruiter Recrutier { get; set; }
 
         public Application()
         {
