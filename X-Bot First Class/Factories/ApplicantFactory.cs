@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using X_Bot_First_Class.Common.Models;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace X_Bot_First_Class.Factories
 {
@@ -58,6 +59,43 @@ namespace X_Bot_First_Class.Factories
             {
                 return Applicant.FromJsonString(entity.Data);
             }
+        }
+
+        public static async Task<Applicant> GetApplicantByContext(IDialogContext context)
+        {
+            Applicant a = null;
+            switch (context.Activity.ChannelId)
+            {
+                case "sms":
+                    a = await GetApplicantByPhone(context.Activity.From.Id);
+                    break;
+                case "skype":
+                case "email":
+                    a = await GetApplicantByEmail(context.Activity.From.Id);
+                    break;
+                case "emulator":
+                    a = await GetApplicantByPhone("1-504-813-3964");
+                    break;
+                default:
+                    throw new Exception($"Unsupported channel type {context.Activity.ChannelId} in Root Dialog.");
+            }
+            if (a == null)
+            {
+                a = new Applicant();
+                switch (context.Activity.ChannelId)
+                {
+                    case "sms":
+                        a.Phone = context.Activity.From.Id;
+                        break;
+                    case "skype":
+                    case "email":
+                        a.Email = context.Activity.From.Id;
+                        a.Phone = "1-713-000-0000";
+                        break;
+                }
+                // need logic at some point to obtain phone number when in skype/email channel and email when in SMS channel
+            }
+            return a;
         }
 
         public static async Task PersistApplicant(Applicant a)

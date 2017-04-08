@@ -90,11 +90,8 @@ namespace X_Bot_First_Class
             await ApplicantFactory.PersistApplicant(a);
 
             // save the conversation state so when the recipient responds we know in what context they replied in
-            var stateClient = new StateClient(new Uri(ConfigurationManager.AppSettings["BotFramework_StateServiceUrl"]), credentials);
-            var userData = await stateClient.BotState.GetUserDataAsync("sms", phoneNumber);
-            userData.SetProperty<string>("conversationType", ConversationType.FillOutW4.ToString());
-            userData.SetProperty<string>("applicant", a.ToString());
-            await stateClient.BotState.SetUserDataAsync("sms", phoneNumber, userData);
+            app.State = ConversationType.FillOutW4;
+            await ApplicantFactory.PersistApplicant(a);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }

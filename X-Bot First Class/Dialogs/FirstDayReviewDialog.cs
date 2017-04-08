@@ -9,6 +9,7 @@ using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using WildMouse.Unearth.Cognitive.TextAnalytics;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Factories;
 
 namespace X_Bot_First_Class.Dialogs
 {
@@ -31,16 +32,18 @@ namespace X_Bot_First_Class.Dialogs
         {
             var textAnalyticsClient = new TextAnalyticsClient(ConfigurationManager.AppSettings["CognitiveServices_TextAnalyticsKey"]);
             var sentiment = await textAnalyticsClient.GetSentimentForTextAsync(result.Query);
-            var recruiter = string.Empty;
-            context.UserData.TryGetValue<string>("recruiterName", out recruiter);
+
+            // attempt to obtain applicant info
+            var a = await ApplicantFactory.GetApplicantByContext(context);
+            var app = a.Applications.First().Value;
 
             if (sentiment < 0.45)
             {
-                PromptDialog.Text(context, ResumeAfterEmailPromptAsync, string.Format("I'm sorry to hear that. Would you like me to email your recruiter, {0}, so that you can discuss the matter?", recruiter));
+                PromptDialog.Text(context, ResumeAfterEmailPromptAsync, string.Format("I'm sorry to hear that. Would you like me to email your recruiter, {0}, so that you can discuss the matter?", app.Recrutier.Name));
             }
             else if (sentiment >= 0.45 && sentiment <= 0.75)
             {
-                await context.PostAsync(string.Format("Ok. Contact your recruiter, {0}, if there is anything you would like to discuss regarding your placement.", recruiter));
+                await context.PostAsync(string.Format("Ok. Contact your recruiter, {0}, if there is anything you would like to discuss regarding your placement.", app.Recrutier.Name));
 
                 context.Done<string>(null);
             }
@@ -63,10 +66,11 @@ namespace X_Bot_First_Class.Dialogs
             var response = await result;
             if (Regex.Match(response, "(Yes|yes|yea|yeah|ok|sure)").Success)
             {
-                var recruiter = string.Empty;
-                context.UserData.TryGetValue<string>("recruiterName", out recruiter);
+                // attempt to obtain applicant info
+                var a = await ApplicantFactory.GetApplicantByContext(context);
+                var app = a.Applications.First().Value;
 
-                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be hearing from us soon.", recruiter));
+                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be hearing from us soon.", app.Recrutier.Name));
 
                 context.Done<string>(null);
             }

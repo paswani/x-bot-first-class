@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Factories;
 
 namespace X_Bot_First_Class.Dialogs
 {
@@ -24,18 +25,18 @@ namespace X_Bot_First_Class.Dialogs
         /// <returns></returns>
         [LuisIntent("Welcome")]
         public async Task Welcome(IDialogContext context, LuisResult result)
-        {
-            var name = string.Empty;
-            context.UserData.TryGetValue<string>("name", out name);
+        {            
+            // attempt to obtain applicant info
+            var a = await ApplicantFactory.GetApplicantByContext(context);
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(a.Name))
             {
                 // prompt for the user's name
                 PromptDialog.Text(context, ResumeAfterNamePromptAsync, Resources.msgWelcome);
             }
             else
             {
-                await context.PostAsync(string.Format(Resources.msgWelcomeBack, name));
+                await context.PostAsync(string.Format(Resources.msgWelcomeBack, a.Name));
 
                 context.Done<string>(null);
             }
@@ -61,7 +62,11 @@ namespace X_Bot_First_Class.Dialogs
                 });
                 name = name.Trim();
 
-                context.UserData.SetValue<string>("name", name);
+                // attempt to save applicant info
+                var a = await ApplicantFactory.GetApplicantByContext(context);
+                a.Name = name;
+                await ApplicantFactory.PersistApplicant(a);
+
                 await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
 
                 context.Done<string>(null);
@@ -98,8 +103,11 @@ namespace X_Bot_First_Class.Dialogs
             var name = await result;
             if (!string.IsNullOrEmpty(name))
             {
-                // persist the data for the current user
-                context.UserData.SetValue<string>("name", name);
+                // attempt to save applicant info
+                var a = await ApplicantFactory.GetApplicantByContext(context);
+                a.Name = name;
+                await ApplicantFactory.PersistApplicant(a);
+
                 await context.PostAsync(string.Format(Resources.mgsWelcomeWithName, name));
 
                 context.Done<string>(null);
@@ -117,8 +125,11 @@ namespace X_Bot_First_Class.Dialogs
             var name = await result;
             if (!string.IsNullOrEmpty(name))
             {
-                // persist the data for the current user
-                context.UserData.SetValue<string>("name", name);
+                // attempt to save applicant info
+                var a = await ApplicantFactory.GetApplicantByContext(context);
+                a.Name = name;
+                await ApplicantFactory.PersistApplicant(a);
+
                 await context.PostAsync(string.Format(Resources.msgIWillCallYou, name));
 
                 context.Done<string>(null);
