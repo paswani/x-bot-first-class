@@ -22,6 +22,8 @@ namespace X_Bot_First_Class.Common
         /// <returns>True if it can handle it, false otherwise.</returns>
         public async Task<bool> CanHandle(string query)
         {
+            if (string.IsNullOrEmpty(query)) return false;
+
             var tasks = services.Select(s => s.QueryAsync(query, CancellationToken.None)).ToArray();
             var results = await Task.WhenAll(tasks);
 

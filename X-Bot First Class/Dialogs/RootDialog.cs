@@ -32,14 +32,23 @@ namespace X_Bot_First_Class.Dialogs
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            var conversationType = ConversationType.None;
-
             // attempt to obtain applicant info
             var a = await ApplicantFactory.GetApplicantByContext(context);
-            if (a.Applications.Count > 0) conversationType = a.Applications.First().Value.State;
+            if (a == null)
+            {
+                // prompt the user for email or phone number
+                PromptDialog.Text(context, ResumeAfterPromptAsync, "Hello. This is Rachael from Express. I am not able to recognize you. Please enter either your email or phone number.");
+            }
+            else
+            {
+                await ForwardToDialog(context, result, a);
+            }
+        }
 
+        private async Task ForwardToDialog(IDialogContext context, LuisResult result, Applicant a)
+        {
             var factory = new LuisDialogFactory();
-            var dialog = await factory.Create(result.Query, a, conversationType);
+            var dialog = await factory.Create(result?.Query, a);
 
             if (dialog != null)
             {
@@ -52,6 +61,39 @@ namespace X_Bot_First_Class.Dialogs
             {
                 await context.PostAsync(Resources.msgIDidntCatchThat);
                 context.Wait(MessageReceived);
+            }
+        }
+
+        private async Task ResumeAfterPromptAsync(IDialogContext context, IAwaitable<string> result)
+        {
+            var response = await result;
+
+            if (!string.IsNullOrEmpty(response))
+            {
+                // if the response contains an '@', then assume it is an email address, otherwise assume it is a phone number
+                Applicant a = null;
+                if (response.Contains("@"))
+                {
+                    a = await ApplicantFactory.GetApplicantByEmail(response.Trim());
+                }
+                else
+                {
+                    a = await ApplicantFactory.GetApplicantByPhone(response.Replace("-", string.Empty).Replace("+", string.Empty).Replace(" ", string.Empty).Trim());
+                }
+
+                if (a == null)
+                {
+                    await context.PostAsync("I'm sorry. I was not able to find your account. Please contact your Express recruiter.");
+                    context.Done<string>(null);
+                }
+                else
+                {
+                    await context.PostAsync($"Welcome back, {a.Name}!");
+
+                    // TODO: persist the connection between the context.From.Id and the applicant
+
+                    await ForwardToDialog(context, null, a);
+                }
             }
         }
 

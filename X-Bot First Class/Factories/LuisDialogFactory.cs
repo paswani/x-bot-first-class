@@ -42,11 +42,15 @@ namespace X_Bot_First_Class
         /// Creates the specified query.
         /// </summary>
         /// <param name="query">The query.</param>
-        /// <param name="conversationType">Type of the conversation.</param>
+        /// <param name="a">a.</param>
         /// <returns></returns>
-        public async Task<IDialog<object>> Create(string query, Applicant a, ConversationType conversationType)
+        public async Task<IDialog<object>> Create(string query, Applicant a)
         {
             EnsureDialogs();
+
+            var conversationType = ConversationType.None;
+            if (a.Applications.Count > 0) conversationType = a.Applications.First().Value.State;
+
             switch (conversationType)
             {
                 case ConversationType.FirstDayReview:
@@ -57,7 +61,7 @@ namespace X_Bot_First_Class
                     return Dialogs.FirstOrDefault(dialog => dialog is RejectionNoticeDialog);
                 case ConversationType.ScheduleInterview:
                 default:
-                    query = query.ToLowerInvariant();
+                    query = query?.ToLowerInvariant();
 
                     foreach (var resourceDialog in Dialogs)
                     {
