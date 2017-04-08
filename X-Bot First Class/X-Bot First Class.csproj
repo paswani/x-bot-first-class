@@ -118,10 +118,7 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Resources\goodbyeEmailTemplate.html" />
     <Content Include="Resources\rejectionEmailTemplate.html" />
-    <Content Include="Resources\suggestionApplyEmailTemplate.html" />
-    <Content Include="Resources\thankYouEmailTemplate.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
