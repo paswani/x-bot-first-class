@@ -156,6 +156,8 @@
     <Compile Include="Dialogs\FirstDayReviewDialog.cs" />
     <Compile Include="Dialogs\RejectionNoticeDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\ScheduleInterviewDialog.cs" />
+    <Compile Include="Dialogs\ScheduleInterviewForm.cs" />
     <Compile Include="Dialogs\WelcomeDialog.cs" />
     <Compile Include="Extensions\EntityRecommendation.cs" />
     <Compile Include="Extensions\LuisResult.cs" />
@@ -171,6 +173,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Bot.Service.cs" />
+    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Services\Express.Service.cs" />
   </ItemGroup>
   <ItemGroup>

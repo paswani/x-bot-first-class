@@ -60,6 +60,7 @@ namespace X_Bot_First_Class
                 case ConversationType.RejectionNotice:
                     return Dialogs.FirstOrDefault(dialog => dialog is RejectionNoticeDialog);
                 case ConversationType.ScheduleInterview:
+                    return ScheduleInterviewDialog.MakeScheduleInterviewDialog();
                 default:
                     query = query?.ToLowerInvariant();
 

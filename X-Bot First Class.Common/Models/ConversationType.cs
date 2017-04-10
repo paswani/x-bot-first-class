@@ -9,6 +9,6 @@
         FirstDayReview = 1,
         FillOutW4 = 2,
         RejectionNotice = 3,
-        ScheduleInterview = 4
+        ScheduleInterview = 4,        
     }
 }
