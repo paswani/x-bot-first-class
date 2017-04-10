@@ -54,6 +54,43 @@ namespace X_Bot_First_Class
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
+        /// <summary>
+        /// Schedule an interview.
+        /// </summary>
+        /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="jobId"></param>
+        /// <param name="apptDateTime"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/sms/scheduleinterview")]
+        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string jobId, DateTime apptDateTime)
+        {
+            if (string.IsNullOrEmpty(phoneNumber)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            // find application
+            Application app = null;
+            Applicant a = await ApplicantFactory.GetApplicantByPhone(phoneNumber);
+            if (a == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (!a.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
+            app = a.Applications[jobId];
+
+            if (!phoneNumber.StartsWith("+")) phoneNumber = string.Concat("+", phoneNumber);
+            var payload = new MessagePayload()
+            {
+                FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
+                ToId = phoneNumber,
+                Text = $"Hello, {a.Name}!. This is Rachel from Express. Let me pull up my calendar?",
+                ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
+            };
+            var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
+            var response = await Bot.SendMessage(payload, credentials);
+
+            // save the conversation state so when the recipient responds we know in what context they replied in
+            app.State = ConversationType.ScheduleInterview;
+            await ApplicantFactory.PersistApplicant(a);
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
 
         /// <summary>
         /// Sends the an SMS informing the applicant of job selection and invites the .
