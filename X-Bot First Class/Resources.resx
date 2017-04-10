@@ -133,7 +133,7 @@
     <value>OK. From now on I will call you {0}.</value>
   </data>
   <data name="msgWelcome" xml:space="preserve">
-    <value>Hello. My name is Rachael. With whom do I have the pleasure of chatting with?</value>
+    <value>Hello. My name is Rachel. With whom do I have the pleasure of chatting with?</value>
   </data>
   <data name="msgWelcomeBack" xml:space="preserve">
     <value>Welcome back, {0}! How can I help you?</value>

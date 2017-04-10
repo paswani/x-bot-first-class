@@ -79,7 +79,7 @@ namespace X_Bot_First_Class
             {
                 FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
                 ToId = phoneNumber,
-                Text = string.Format("Hello, {0}. This is Rachael from Express. It is my pleasure to inform you that you have been accepted for the position '{1}' at {2}. I'd like to walk you through filling out your IRS W-4 form. We are required to get this information from you before you can start your position. To get started, please add me to your contacts in skype.", 
+                Text = string.Format("Hello, {0}. This is Rachel from Express. It is my pleasure to inform you that you have been accepted for the position '{1}' at {2}. I'd like to walk you through filling out your IRS W-4 form. We are required to get this information from you before you can start your position. To get started, please add me to your contacts in skype.", 
                     a.Name, app.Title, app.Company),
                 ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
             };
