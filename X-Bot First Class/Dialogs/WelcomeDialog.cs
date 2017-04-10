@@ -13,7 +13,7 @@ namespace X_Bot_First_Class.Dialogs
     /// <summary>
     /// Welcome dialog class
     /// </summary>
-    [LuisModel("660d5761-1f2f-4e2c-8d30-e937614ea94f", "08107661360644ab8532afffc187bbac")]
+    [LuisModel("660d5761-1f2f-4e2c-8d30-e937614ea94f", "f209e6595d014a54b02e51b08d3b9c6d")]
     [Serializable]
     public class WelcomeDialog : LuisDialogBase<object>
     {

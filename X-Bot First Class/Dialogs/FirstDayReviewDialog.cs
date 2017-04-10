@@ -16,7 +16,7 @@ namespace X_Bot_First_Class.Dialogs
     /// <summary>
     /// First Day Review dialog class
     /// </summary>
-    [LuisModel("2a49aec7-3787-4105-b52e-c43e401599e0", "08107661360644ab8532afffc187bbac")]
+    [LuisModel("2a49aec7-3787-4105-b52e-c43e401599e0", "f209e6595d014a54b02e51b08d3b9c6d")]
     [Serializable]
     public class FirstDayReviewDialog : LuisDialogBase<object>
     {
