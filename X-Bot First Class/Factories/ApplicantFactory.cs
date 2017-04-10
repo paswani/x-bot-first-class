@@ -67,7 +67,7 @@ namespace X_Bot_First_Class.Factories
             switch (context.Activity.ChannelId)
             {
                 case "sms":
-                    a = await GetApplicantByPhone(context.Activity.From.Id);
+                    a = await GetApplicantByPhone(context.Activity.From.Id.TrimStart('+'));
                     break;
                 case "skype":
                 case "email":
