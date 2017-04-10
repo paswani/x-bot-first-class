@@ -7,6 +7,8 @@ using Microsoft.Bot.Connector;
 using X_Bot_First_Class.Common;
 using X_Bot_First_Class.Services;
 using System.Linq;
+using X_Bot_First_Class.Common.Models;
+using X_Bot_First_Class.Factories;
 
 namespace X_Bot_First_Class.JumpStart
 {
@@ -14,7 +16,18 @@ namespace X_Bot_First_Class.JumpStart
     {
         static void Main(string[] args)
         {
-            SendEmail().Wait();
+            UpdateApplicant("12816459336").Wait();
+        }
+
+        public static async Task UpdateApplicant(string phoneNumber)
+        {
+            Applicant a = null;
+            a = await ApplicantFactory.GetApplicantByPhone("12817489336");
+            a.Applications.First().Value.Recrutier = new Recruiter()
+            {
+                Name = "Alan Zigelman",
+            };
+            await ApplicantFactory.PersistApplicant(a);
         }
 
         public static async Task SendSms()

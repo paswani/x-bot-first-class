@@ -59,11 +59,10 @@ namespace X_Bot_First_Class
         /// </summary>
         /// <param name="phoneNumber">The phone number.</param>
         /// <param name="jobId"></param>
-        /// <param name="apptDateTime"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("api/sms/scheduleinterview")]
-        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string jobId, DateTime apptDateTime)
+        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string jobId)
         {
             if (string.IsNullOrEmpty(phoneNumber)) return Request.CreateResponse(HttpStatusCode.BadRequest);
 
@@ -79,7 +78,7 @@ namespace X_Bot_First_Class
             {
                 FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
                 ToId = phoneNumber,
-                Text = $"Hello, {a.Name}!. This is Rachel from Express. Let me pull up my calendar?",
+                Text = $"Hello, {a.Name}!. This is Rachel from Express. Your recruiter {app.Recrutier.Name} would like to schedule an interview with you. Would you like to schedule the interview?",
                 ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
