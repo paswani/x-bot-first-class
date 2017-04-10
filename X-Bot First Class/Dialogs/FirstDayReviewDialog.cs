@@ -36,6 +36,13 @@ namespace X_Bot_First_Class.Dialogs
             // attempt to obtain applicant info
             var a = await ApplicantFactory.GetApplicantByContext(context);
             var app = a.Applications.First().Value;
+            app.SentimentData.Add(new Common.Models.Sentiment()
+            {
+                AdvisorContacted = false,
+                SentimentScore = sentiment,
+                SentimentTaken = DateTime.Now
+            });
+            await ApplicantFactory.PersistApplicant(a);
 
             if (sentiment < 0.45)
             {
@@ -69,8 +76,10 @@ namespace X_Bot_First_Class.Dialogs
                 // attempt to obtain applicant info
                 var a = await ApplicantFactory.GetApplicantByContext(context);
                 var app = a.Applications.First().Value;
+                app.SentimentData.Last().AdvisorContacted = true;
+                await ApplicantFactory.PersistApplicant(a);
 
-                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be hearing from us soon.", app.Recrutier.Name));
+                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be contacted soon.", app.Recrutier.Name));
 
                 context.Done<string>(null);
             }
