@@ -41,7 +41,7 @@ namespace X_Bot_First_Class
             {
                 FromId = ConfigurationManager.AppSettings["Twilio_PhoneNumber"],
                 ToId = phoneNumber,
-                Text = string.Format("Hello, {0}!. This is Rachael from Express. How was your first day at {1}?", a.Name, app.Company),
+                Text = string.Format("Hello, {0}!. This is Rachel from Express. How was your first day at {1}?", a.Name, app.Company),
                 ServiceUrl = ConfigurationManager.AppSettings["BotFramework_SmsServiceUrl"]
             };
             var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
