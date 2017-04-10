@@ -150,12 +150,15 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\IcsController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Dialogs\FillW4Dialog.cs" />
     <Compile Include="Dialogs\FirstDayReviewDialog.cs" />
     <Compile Include="Dialogs\RejectionNoticeDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\ScheduleInterviewDialog.cs" />
+    <Compile Include="Dialogs\ScheduleInterviewForm.cs" />
     <Compile Include="Dialogs\WelcomeDialog.cs" />
     <Compile Include="Extensions\EntityRecommendation.cs" />
     <Compile Include="Extensions\LuisResult.cs" />
@@ -171,6 +174,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Bot.Service.cs" />
+    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Services\Express.Service.cs" />
   </ItemGroup>
   <ItemGroup>

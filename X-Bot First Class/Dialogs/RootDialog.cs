@@ -37,7 +37,7 @@ namespace X_Bot_First_Class.Dialogs
             if (a == null)
             {
                 // prompt the user for email or phone number
-                PromptDialog.Text(context, ResumeAfterPromptAsync, "Hello. This is Rachael from Express. I am not able to recognize you. Please enter either your email or phone number.");
+                PromptDialog.Text(context, ResumeAfterPromptAsync, "Hello. This is Rachel from Express. I am not able to recognize you. Please enter either your email or phone number.");
             }
             else
             {

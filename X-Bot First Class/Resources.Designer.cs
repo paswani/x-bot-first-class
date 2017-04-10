@@ -106,7 +106,7 @@ namespace X_Bot_First_Class {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hello. My name is Rachael. With whom do I have the pleasure of chatting with?.
+        ///   Looks up a localized string similar to Hello. My name is Rachel. With whom do I have the pleasure of chatting with?.
         /// </summary>
         internal static string msgWelcome {
             get {
@@ -136,24 +136,16 @@ namespace X_Bot_First_Class {
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;
         ///&lt;body&gt;
-        ///  &lt;p&gt;Hello, {{0}},&lt;/p&gt;
-        ///  &lt;p&gt;We regret to inform you that you were not selected for the {{1}} position. Although the position has been filled, we recommend you take a look at the following 3 job positions which require similar skills.&lt;/p&gt;
-        ///  &lt;p&gt;
-        ///    &lt;ol&gt;
-        ///      &lt;li&gt;
-        ///        &lt;a href=&quot;#&quot;&gt;{{2}}&lt;/a&gt;
-        ///      &lt;/li&gt;
-        ///      &lt;li&gt;
-        ///        &lt;a href=&quot;#&quot;&gt;{{3}}&lt;/a&gt;
-        ///      &lt;/li&gt;
-        ///      &lt;li&gt;
-        ///        &lt;a href=&quot;#&quot;&gt;{{4}}&lt;/a&gt;
-        ///      &lt;/li&gt;
-        ///    &lt;/ol&gt;
-        ///  &lt;/p&gt;
-        ///&lt;/body&gt;
-        ///&lt;/html&gt;
-        ///.
+        ///    &lt;p&gt;{0},&lt;/p&gt;
+        ///    &lt;p&gt;This is Rachel from Express. I am sorry but you were not selected for the {1} position. Although the position has been filled, we recommend you take a look at the following {2} job positions which require similar skills.&lt;/p&gt;
+        ///    &lt;p&gt;
+        ///        &lt;ol&gt;
+        ///            {3}
+        ///        &lt;/ol&gt;
+        ///    &lt;/p&gt;
+        ///    &lt;p&gt;If you would like to apply for a position, reply to this email with the job number from the above list and I will submit your application.&lt;/p&gt;
+        ///    &lt;p&gt;
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string rejectionEmailTemplate {
             get {
