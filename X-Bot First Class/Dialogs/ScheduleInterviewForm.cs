@@ -1,8 +1,16 @@
 using System;
+using System.Configuration;
+using System.Dynamic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Chronic;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Connector;
+using X_Bot_First_Class.Common;
+using X_Bot_First_Class.Common.Models;
+using X_Bot_First_Class.Factories;
 using X_Bot_First_Class.Services;
 
 namespace X_Bot_First_Class.Dialogs
@@ -18,8 +26,34 @@ namespace X_Bot_First_Class.Dialogs
 
         public static IForm<ScheduleInterviewForm> BuildForm()
         {
+            //OnCompletionAsyncDelegate<ScheduleInterviewForm> sendCalendarInvite = async (context, state) =>
+            //{
+            //    Application app = null;
+            //    Applicant ab = await ApplicantFactory.GetApplicantByEmail(email);
+            //    if (ab == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            //    if (!ab.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
+            //    app = ab.Applications[jobId];
+
+            //    dynamic channelData = new ExpandoObject();
+            //    channelData.HtmlBody = string.Format(Resources.calendarInvitation, a.Name, app.Title, filteredJobTitles.Count, jobSuggestionHtml.ToString());
+            //    channelData.Attachments =;
+            //    channelData.Subject = "Express Interview Invitation";
+
+            //    var payload = new MessagePayload()
+            //    {
+            //        FromId = ConfigurationManager.AppSettings["Office356_Email"],
+            //        ToId = email,
+            //        ChannelData = channelData,
+            //        ServiceUrl = ConfigurationManager.AppSettings["BotFramework_EmailServiceUrl"]
+            //    };
+            //    var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
+            //    var response = await Bot.SendMessage(payload, credentials);                
+            //};
+
+//            OnCompletionAsyncDelegate<ScheduleInterviewForm> sendCalendarInvite = SendCalendarInvite;
+
             var a = new FormBuilder<ScheduleInterviewForm>()
-                .Message("Hi, let me pull up my calendar so I can schedule an interview for you.")
+                .Message("Ok, got my calendar in front of me .")
                 .Field(nameof(Date), validate: (state, value) =>
                 {
                     var service = new CalendarService();
@@ -37,7 +71,7 @@ namespace X_Bot_First_Class.Dialogs
                         {
                             var availableDays = service.AvailableDays();
                             result.IsValid = false;
-                            result.Feedback = $"Looks like I'm booked up, how about {String.Join(",", availableDays.Select(x => x.ToString("D")))}";
+                            result.Feedback = $"Looks like I'm booked solid then, how about one of these {String.Join(", ", availableDays.Select(x => x.ToString("D")))}";
                         }
                         else
                         {
@@ -58,7 +92,7 @@ namespace X_Bot_First_Class.Dialogs
                     {
                         var availableTime = service.AvailableTime(state.ChoosenDate);
                         result.IsValid = false;
-                        result.Feedback = $"I don't understand '{value}'. Please be more precise. A few options are {string.Join(", ", availableTime.Select(x => x.ToString("t")))}";
+                        result.Feedback = $"Didn't I tell you I'm dyslexic '{value}'. Here's what I have available {string.Join(", ", availableTime.Select(x => x.ToString("t")))}";
                     }
                     else
                     {
@@ -66,7 +100,7 @@ namespace X_Bot_First_Class.Dialogs
                         {
                             var availableTime = service.AvailableTime(state.ChoosenDate);
                             result.IsValid = false;
-                            result.Feedback = $"{value} is not available. Options are {string.Join(", ", availableTime.Select(x => x.ToString("t")))}";
+                            result.Feedback = $"{value} is not available. Here's what I have left: {string.Join(", ", availableTime.Select(x => x.ToString("t")))}";
                         }
                         else
                         {
@@ -77,9 +111,16 @@ namespace X_Bot_First_Class.Dialogs
                 })
                 //.AddRemainingFields()
                 .Confirm((state) => Task.FromResult(new PromptAttribute($"We're almost there, {state.ChoosenDate:D} at {state.Time}?  Right?")))
-                .Message((state) => Task.FromResult(new PromptAttribute( $"Thanks, I have scheduled your appointment for {state.ChoosenDate:D} at {state.Time}. The Express office is located at 9701 Boardwalk, Oklahoma City, OK 73162")))
+                .Message((state) => Task.FromResult(new PromptAttribute($"Thanks, I have scheduled your appointment for {state.ChoosenDate:D} at {state.Time}. The Express office is located at 9701 Boardwalk, Oklahoma City, OK 73162")))
+                .Message((state) => Task.FromResult(new PromptAttribute($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/sms/scheduleinterview?{state.ChoosenDate:d}:{state.Time}")))
+                //.OnCompletion(sendCalendarInvite)
                 .Build();
             return a;
         }
+
+        //private static Task SendCalendarInvite(IDialogContext context, ScheduleInterviewForm state)
+        //{
+            
+        //}
     }
 }

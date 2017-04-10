@@ -17,7 +17,6 @@ namespace X_Bot_First_Class.Common.Models
         public string Phone { get; set; }
         public Dictionary<string, Application> Applications { get; private set; }
         public W4Info W4Info { get; set; }
-        public DateTime InterviewAppointment { get; set; }
         public Applicant() {
             this.Applications = new Dictionary<string, Application>();
         }
