@@ -74,6 +74,7 @@ namespace X_Bot_First_Class.Factories
                     a = await GetApplicantByEmail(context.Activity.From.Id);
                     break;
             }
+            if(a != null) context.UserData.SetValue<Applicant>("applicant", a);
             return a;
         }
 
