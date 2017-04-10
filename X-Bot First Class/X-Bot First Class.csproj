@@ -150,6 +150,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\IcsController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Dialogs\FillW4Dialog.cs" />
