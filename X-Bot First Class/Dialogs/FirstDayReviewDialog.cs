@@ -16,7 +16,7 @@ namespace X_Bot_First_Class.Dialogs
     /// <summary>
     /// First Day Review dialog class
     /// </summary>
-    [LuisModel("2a49aec7-3787-4105-b52e-c43e401599e0", "08107661360644ab8532afffc187bbac")]
+    [LuisModel("2a49aec7-3787-4105-b52e-c43e401599e0", "f209e6595d014a54b02e51b08d3b9c6d")]
     [Serializable]
     public class FirstDayReviewDialog : LuisDialogBase<object>
     {
@@ -36,6 +36,13 @@ namespace X_Bot_First_Class.Dialogs
             // attempt to obtain applicant info
             var a = await ApplicantFactory.GetApplicantByContext(context);
             var app = a.Applications.First().Value;
+            app.SentimentData.Add(new Common.Models.Sentiment()
+            {
+                AdvisorContacted = false,
+                SentimentScore = sentiment,
+                SentimentTaken = DateTime.Now
+            });
+            await ApplicantFactory.PersistApplicant(a);
 
             if (sentiment < 0.45)
             {
@@ -69,8 +76,10 @@ namespace X_Bot_First_Class.Dialogs
                 // attempt to obtain applicant info
                 var a = await ApplicantFactory.GetApplicantByContext(context);
                 var app = a.Applications.First().Value;
+                app.SentimentData.Last().AdvisorContacted = true;
+                await ApplicantFactory.PersistApplicant(a);
 
-                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be hearing from us soon.", app.Recrutier.Name));
+                await context.PostAsync(string.Format("Ok. I have sent {0} an email and you should be contacted soon.", app.Recrutier.Name));
 
                 context.Done<string>(null);
             }

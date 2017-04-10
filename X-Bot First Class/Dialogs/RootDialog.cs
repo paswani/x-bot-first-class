@@ -15,7 +15,7 @@ namespace X_Bot_First_Class.Dialogs
     /// <summary>
     /// Root dialog class
     /// </summary>
-    [LuisModel("e82853ef-0ac6-4124-9e80-3e71057382a2", "08107661360644ab8532afffc187bbac")]
+    [LuisModel("e82853ef-0ac6-4124-9e80-3e71057382a2", "f209e6595d014a54b02e51b08d3b9c6d")]
     [Serializable]
     public class RootDialog : LuisDialogBase<object>
     {

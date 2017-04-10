@@ -12,7 +12,7 @@ namespace X_Bot_First_Class.Common.Models
     public class Sentiment
     {
         public DateTime SentimentTaken { get; set; }
-        public float SentimentScore { get; set; }
+        public double SentimentScore { get; set; }
         public Boolean AdvisorContacted { get; set; }
     }
 }
