@@ -11,7 +11,7 @@ namespace X_Bot_First_Class.Dialogs
     /// <summary>
     /// Rejection Notice dialog class
     /// </summary>
-    [LuisModel("b71a7e18-f087-498a-852a-f09650aae283", "08107661360644ab8532afffc187bbac")]
+    [LuisModel("b71a7e18-f087-498a-852a-f09650aae283", "f209e6595d014a54b02e51b08d3b9c6d")]
     [Serializable]
     public class RejectionNoticeDialog : LuisDialogBase<object>
     {
