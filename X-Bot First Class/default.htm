@@ -1,151 +1,80 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <title></title>
-    <meta charset="utf-8" />
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(document).ready(() => {
-            $(".scenario1 > a").click((e) => {
-                var u = e.target.href;
-                u += "&jobId=123456&jobTitle=Master of the Universe&company=Infusion";
-                $.get(u, (d) => {
-                    alert("Scheduling initiated.");
-                    $(".scenario1").hide();
-                    $(".scenario2").show();
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(document).ready(() => {
+                $(".scenario0").click((e) => {
+                    $(".scenario0").hide();
+                    $(".scenario1").show();
                 });
-                return false;
-            });
-            $("#schedule").click((e) => {
-                var u = "/api/sms/scheduleinterview?phoneNumber=" + $(".scenario1 #phone").val() + "&email=" + $(".scenario1 #email").val() + "&name=" + $(".scenario1 #name").val();
-                u += "&jobId=123456&jobTitle=Master of the Universe&company=Infusion";
-                $.get(u, (d) => {
-                    alert("Scheduling initiated.");
-                    $(".scenario1").hide();
-                    $(".scenario2").show();
-                });
-            });
 
-            $(".scenario2 > a").click((e) => {
-                var u = e.target.href;
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("Acceptance Notification Delivered.");
-                    $(".scenario2").hide();
-                    $(".scenario3").show();
+                $(".scenario1 > a").click((e) => {
+                    var u = e.target.nodeName.toLowerCase() == "img" ?  e.target.parentElement.href : e.target.href;
+                    u += "&jobId=123456&jobTitle=Master of the Universe&company=Infusion";
+                    $.get(u, (d) => {
+                        alert("Scheduling initiated.");
+                        $(".scenario1").hide();
+                        $(".scenario2").show();
+                    });
+                    return false;
                 });
-                return false;
-            });
-            $("#accept").click((e) => {
-                var u = "/api/sms/applicantaccepted?phoneNumber=" + $(".scenario2 #phone").val()
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("Acceptance Notification Delivered.");
-                    $(".scenario2").hide();
-                    $(".scenario3").show();
-                });
-            });
 
-            $(".scenario3 > a").click((e) => {
-                var u = e.target.href;
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("Rejection delivered and alternate suggestions made.");
-                    $(".scenario3").hide();
-                    $(".scenario4").show();
-                });
-                return false;
-            });
-            $("#reject").click((e) => {
-                var u = "/api/email/rejectionNotice?email=" + $(".scenario3 #email").val()
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("Rejection delivered and alternate suggestions made.");
-                    $(".scenario3").hide();
-                    $(".scenario4").show();
-                });
-            });
+                $(".scenario2 > a").click((e) => {
+                    var elem = e.target.nodeName.toLowerCase() == "img" ? e.target.parentElement : e.target;
+                    var u = elem.href;
+                    u += "&jobId=123456";
+                    $.get(u, (d) => {
+                        alert("Acceptance Notification Delivered.");
+                        $(".scenario2").hide();
+                        $(".scenario3").show();
+                    });
 
-
-            $(".scenario4 > a").click((e) => {
-                var u = e.target.href;
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("First Day Review initiated.");
-                    $(".scenario4").hide();
+                    u = $(elem).attr("rejectionHref");
+                    //$.get(u);
+                    return false;
                 });
-                return false;
-            });
-            $("#review").click((e) => {
-                var u = "/api/sms/firstdayreview?phoneNumber=" + $(".scenario4 #phone").val()
-                u += "&jobId=123456";
-                $.get(u, (d) => {
-                    alert("First Day Review initiated.");
-                    $(".scenario4").hide();
+
+                $(".scenario3 > a").click((e) => {
+                    var u = e.target.nodeName.toLowerCase() == "img" ? e.target.parentElement.href : e.target.href;
+                    u += "&jobId=123456";
+                    $.get(u, (d) => {
+                        alert("First Day Review initiated.");
+                        $(".scenario3").hide();
+                        $(".scenario0").show();
+                    });
+                    return false;
                 });
-            });
+            })
 
-        })
-
-    </script>
-    <style>
-        .scenario1, .scenario2, .scenario3, .scenario4 { float: right; padding-right: 50px;  }
-        .scenario2, .scenario3, .scenario4 { display: none; }
-        .scenario1 > a, .scenario2 > a, .scenario3 > a, .scenario4 > a   { display: block; }
-        .scenario1 input, .scenario2 input, .scenario3 input, .scenario4 input  { display: block; width: 350px; }
-    </style>
-</head>
-<body style="font-family:'Segoe UI'">
-    <iframe src='https://webchat.botframework.com/embed/ExpressBot?s=D5x7jXR2wqs.cwA.8po.Vv-JouJNW7fjbJj-lj045npxNe56CgRBFALExL8eHi4' style="height:500px;"></iframe>
-    <div class="scenario1">
-        <h2>Scenario 1 - Scheduling</h2>
-        <a href="/api/sms/scheduleinterview?phoneNumber=1-504-813-3964&email=thor.t.schueler@gmail.com&name=Thor Schueler">Schedule Interview with Candidate Thor</a>
-        <a href="/api/sms/scheduleinterview?phoneNumber=12817489336&email=zvalimohideen@infusion.com&name=Zubair Valimohideen">Schedule Interview with Candidate Zubair</a>
-        <a href="/api/sms/scheduleinterview?phoneNumber=17139222599&email=nhaq@infusion.com&name=Nadeem Haq">Schedule Interview with Candidate Nadeem</a>
-        <div>
-            <h5>Other candidate:</h5>
-            <input id="phone" type="text" placeholder="Enter Candidate Phone number" />
-            <input id="email" type="text" placeholder="Enter Candidate Email" />
-            <input id="name" type="text" placeholder="Enter Candidate Name" />
-            <button id="schedule">Schedule</button>
+        </script>
+        <style>
+            .scenario1, .scenario2, .scenario3 { display: none; }
+            .scenario1 > a, .scenario2 > a, .scenario3 > a, .scenario4 > a   { display: block; }
+        </style>
+    </head>
+    <body style="font-family:'Segoe UI'">
+        <div class="scenario0">
+            <img src="/Content/Images/0 Welcome.png" />
         </div>
-    </div>
-    <div class="scenario2">
-        <h2>Scenario 2 - Successful Candidate - Notify and fill out W4</h2>
-        <a href="/api/sms/applicantaccepted?phoneNumber=1-504-813-3964">Accept Candidate Thor</a>
-        <a href="/api/sms/applicantaccepted?phoneNumber=12817489336">Accept Candidate Zubair</a>
-        <a href="/api/sms/applicantaccepted?phoneNumber=17139222599">Accept Candidate Nadeem</a>
-        <div>
-            <h5>Other candidate (must have been used in previous scenarios):</h5>
-            <input id="phone" type="text" placeholder="Enter Candidate Phone number" />
-            <button id="accept">Notify of Acceptance</button>
+        <div class="scenario1">
+            <a href="/api/sms/scheduleinterview?phoneNumber=12817489336&email=zvalimohideen@infusion.com&name=Zubair Valimohideen">
+                <img src="/Content/Images/1 Schedule.png" />
+            </a>
         </div>
-    </div>
-    <div class="scenario3">
-        <h2>Scenario 3 - Unsuccessful Candidate - Suggest alternatives</h2>
-        <a href="/api/email/rejectionNotice?email=thor.t.schueler@gmail.com">Reject Candidate Thor</a>
-        <a href="/api/email/rejectionNotice?email=zvalimohideen@infusion.com">Reject Candidate Zubair</a>
-        <a href="/api/email/rejectionNotice?email=nhaq@infusion.com">Reject Candidate Nadeem</a>
-        <div>
-            <h5>Other candidate (must have been used in previous scenarios):</h5>
-            <input id="email" type="text" placeholder="Enter Candidate Email" />
-            <button id="reject">Notify of other opportunities</button>
+        <div class="scenario2">
+            <a href="/api/sms/applicantaccepted?phoneNumber=12817489336" rejectionHref="/api/email/rejectionNotice?email=nhaq@infusion.com">
+                <img src="/Content/Images/2 Offer.png" />
+            </a>
         </div>
-    </div>
-    <div class="scenario4">
-        <h2>Scenario 4 - First Day Review - Assess State</h2>
-        <a href="/api/sms/firstdayreview?phoneNumber=1-504-813-3964">Initiate First Day Review - Thor</a>
-        <a href="/api/sms/firstdayreview?phoneNumber=12817489336">Initiate First Day Review - Zubair</a>
-        <a href="/api/sms/firstdayreviewd?phoneNumber=17139222599">Initiate First Day Review - Nadeem</a>
-        <div>
-            <h5>Other candidate (must have been used in previous scenarios):</h5>
-            <input id="phone" type="text" placeholder="Enter Candidate Phone number" />
-            <button id="review">Initiate First Day Review</button>
+        <div class="scenario3">
+            <a href="/api/sms/firstdayreview?phoneNumber=12817489336">
+                <img src="/Content/Images/3 Satisfaction.png" />
+            </a>
         </div>
-    </div>
-
-
-</body>
+    </body>
 </html>
