@@ -32,7 +32,7 @@ namespace X_Bot_First_Class.Dialogs
                 Applicant a = null;
                 context.UserData.TryGetValue<Applicant>("applicant", out a);
                 if (a == null) throw new ArgumentNullException("applicant");
-                //a.W4Info = state;
+                a.W4Info = state;
                 a.Applications.First().Value.State = Common.ConversationType.None;
                 context.UserData.SetValue<Applicant>("applicant", a);
                 await ApplicantFactory.PersistApplicant(a);
@@ -85,7 +85,7 @@ namespace X_Bot_First_Class.Dialogs
                             }
                             else
                             {
-                                r.Feedback = "Your social security number has am invalid format. Please correct and try again.";
+                                r.Feedback = "Your social security number has an invalid format. Please correct and try again.";
                             }
                             // make call to DHS employee validation endpoint
                             // this is just fake.
