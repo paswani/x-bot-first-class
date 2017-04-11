@@ -88,6 +88,7 @@ namespace X_Bot_First_Class.Dialogs
                 }
                 else
                 {
+                    context.UserData.SetValue<Applicant>("applicant", a);
                     await context.PostAsync($"Welcome back, {a.Name}!");
 
                     // TODO: persist the connection between the context.From.Id and the applicant

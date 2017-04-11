@@ -64,6 +64,7 @@ namespace X_Bot_First_Class.Factories
         public static async Task<Applicant> GetApplicantByContext(IDialogContext context)
         {
             Applicant a = null;
+            if (context.UserData.TryGetValue<Applicant>("applicant", out a)) return a;
             switch (context.Activity.ChannelId)
             {
                 case "sms":

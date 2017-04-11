@@ -28,7 +28,7 @@ namespace X_Bot_First_Class.Common.Models
         [Prompt("Please select your mariage status. If you are married, you might choose to withold on the higher, Single status if you have other income. {||}", ChoiceFormat = "\n({0}) - {1}", ChoiceStyle=ChoiceStyleOptions.PerLine)]
         public MariageStatus MariageStatus { get; set; }
         [Numeric(0, 10)]
-        [Prompt ("How many allowances do want to claim. Generlly, you can claim an allowance for yourself, one for your spourse and one for each of your dependent children.")]
+        [Prompt ("How many allowances do want to claim. Generally, you can claim an allowance for yourself, one for your spouse and one for each of your dependent children.")]
         public int Allowances { get; set; }
         [Numeric(0,1000000)]
         [Prompt("Do you want to withold and additional amount each paycheck? This might be useful if you have additional income outside of this position to avoid a year end tax liability. If you want to withold additionally, please simply enter the amount.")]

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Builder.Dialogs.Internals;
 
 namespace X_Bot_First_Class
 {
@@ -22,7 +23,7 @@ namespace X_Bot_First_Class
             }
             else
             {
-                HandleSystemMessage(activity);
+                await HandleSystemMessage(activity);
             }
            
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -34,7 +35,7 @@ namespace X_Bot_First_Class
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns>Activity.</returns>
-        private Activity HandleSystemMessage(Activity message)
+        private Task<Activity> HandleSystemMessage(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
             {
@@ -46,11 +47,19 @@ namespace X_Bot_First_Class
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
+                if (message.ChannelId == "skype" || message.ChannelId == "skype")
+                {
+
+                }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
                 // Handle add/remove from contact lists
                 // Activity.From + Activity.Action represent what happened
+                if (message.ChannelId == "skype" || message.ChannelId == "skype")
+                {
+
+                }
             }
             else if (message.Type == ActivityTypes.Typing)
             {
@@ -58,8 +67,8 @@ namespace X_Bot_First_Class
             }
             else if (message.Type == ActivityTypes.Ping)
             {
-            }
 
+            }
             return null;
         }
     }
