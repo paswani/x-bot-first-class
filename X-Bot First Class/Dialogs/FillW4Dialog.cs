@@ -39,15 +39,23 @@ namespace X_Bot_First_Class.Dialogs
                 await context.PostAsync("Please hold a moment while I create your form...");
 
                 string W4Uri = FillW4Dialog.FillForm(a);
-                IMessageActivity m = context.MakeMessage();
-                m.Attachments.Add(new Attachment()
-                {
-                    ContentUrl = W4Uri,
-                    ContentType = "application/pdf",
-                    Name = "w4.pdf"
-                });
-                await context.PostAsync(m);
-                await context.PostAsync("Please save this form for future reference! Thanks and I hope we'll talk again soon.");
+                //IMessageActivity m = context.MakeMessage();
+                //m.Attachments.Add(new Attachment()
+                //{
+                //    ContentUrl = W4Uri,
+                //    ContentType = "application/pdf",
+                //    Name = "w4.pdf"
+                //});
+                //m.Text = "Please save this form for future reference!Thanks and I hope we'll talk again soon.";
+                //try
+                //{
+                //    await context.PostAsync(m);
+                //}
+                //catch (Exception ex) {
+                //    Exception e = ex;
+                //    throw;
+                //}
+                await context.PostAsync($"You can find your W4 at {W4Uri}. Please save this form for future reference!Thanks and I hope we'll talk again soon.");
                 context.Done<Applicant>(a);
             };
 
