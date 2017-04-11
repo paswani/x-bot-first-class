@@ -26,34 +26,10 @@ namespace X_Bot_First_Class.Dialogs
 
         public static IForm<ScheduleInterviewForm> BuildForm()
         {
-            //OnCompletionAsyncDelegate<ScheduleInterviewForm> sendCalendarInvite = async (context, state) =>
-            //{
-            //    Application app = null;
-            //    Applicant ab = await ApplicantFactory.GetApplicantByEmail(email);
-            //    if (ab == null) return Request.CreateResponse(HttpStatusCode.NotFound);
-            //    if (!ab.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
-            //    app = ab.Applications[jobId];
-
-            //    dynamic channelData = new ExpandoObject();
-            //    channelData.HtmlBody = string.Format(Resources.calendarInvitation, a.Name, app.Title, filteredJobTitles.Count, jobSuggestionHtml.ToString());
-            //    channelData.Attachments =;
-            //    channelData.Subject = "Express Interview Invitation";
-
-            //    var payload = new MessagePayload()
-            //    {
-            //        FromId = ConfigurationManager.AppSettings["Office356_Email"],
-            //        ToId = email,
-            //        ChannelData = channelData,
-            //        ServiceUrl = ConfigurationManager.AppSettings["BotFramework_EmailServiceUrl"]
-            //    };
-            //    var credentials = new MicrosoftAppCredentials(ConfigurationManager.AppSettings["MicrosoftAppId"], ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
-            //    var response = await Bot.SendMessage(payload, credentials);                
-            //};
-
-//            OnCompletionAsyncDelegate<ScheduleInterviewForm> sendCalendarInvite = SendCalendarInvite;
+            OnCompletionAsyncDelegate<ScheduleInterviewForm> sendCalendarInvite = SendCalendarInvite;
 
             var a = new FormBuilder<ScheduleInterviewForm>()
-                .Message("Ok, got my calendar in front of me .")
+                .Message("Ok, got my calendar in front of me.")
                 .Field(nameof(Date), validate: (state, value) =>
                 {
                     var service = new CalendarService();
@@ -112,15 +88,22 @@ namespace X_Bot_First_Class.Dialogs
                 //.AddRemainingFields()
                 .Confirm((state) => Task.FromResult(new PromptAttribute($"We're almost there, {state.ChoosenDate:D} at {state.Time}?  Right?")))
                 .Message((state) => Task.FromResult(new PromptAttribute($"Thanks, I have scheduled your appointment for {state.ChoosenDate:D} at {state.Time}. The Express office is located at 9701 Boardwalk, Oklahoma City, OK 73162")))
-                .Message((state) => Task.FromResult(new PromptAttribute($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/sms/scheduleinterview?{state.ChoosenDate:d}:{state.Time}")))
-                //.OnCompletion(sendCalendarInvite)
+                //.Message((state) => Task.FromResult(new PromptAttribute($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/sms/scheduleinterview?{state.ChoosenDate:d}:{state.Time}")))
+                .OnCompletion(sendCalendarInvite)
                 .Build();
             return a;
         }
 
-        //private static Task SendCalendarInvite(IDialogContext context, ScheduleInterviewForm state)
-        //{
+        private static async Task SendCalendarInvite(IDialogContext context, ScheduleInterviewForm state)
+        {
+            Applicant a = null;
+            context.UserData.TryGetValue<Applicant>("applicant", out a);
+            var applicationKey = a.Applications.Keys.First();
+            a.Applications[applicationKey].Interview = state.ChoosenDate;
+            await ApplicantFactory.PersistApplicant(a);
+            await context.PostAsync($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/ics?&apptDateTime={state.ChoosenDate:s}");
             
-        //}
+            context.Done<Applicant>(a);
+        }
     }
 }
