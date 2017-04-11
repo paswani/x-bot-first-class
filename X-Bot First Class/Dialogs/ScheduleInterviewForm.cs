@@ -100,8 +100,9 @@ namespace X_Bot_First_Class.Dialogs
             context.UserData.TryGetValue<Applicant>("applicant", out a);
             var applicationKey = a.Applications.Keys.First();
             a.Applications[applicationKey].Interview = state.ChoosenDate;
+            a.Applications[applicationKey].State = ConversationType.None;            
             await ApplicantFactory.PersistApplicant(a);
-            await context.PostAsync($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/ics?&apptDateTime={state.ChoosenDate:s}");
+            await context.PostAsync($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/ics?apptDateTime={state.ChoosenDate:s}");
             
             context.Done<Applicant>(a);
         }
