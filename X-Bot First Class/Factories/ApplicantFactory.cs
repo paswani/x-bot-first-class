@@ -64,16 +64,24 @@ namespace X_Bot_First_Class.Factories
         public static async Task<Applicant> GetApplicantByContext(IDialogContext context)
         {
             Applicant a = null;
-            if (context.UserData.TryGetValue<Applicant>("applicant", out a)) return a;
-            switch (context.Activity.ChannelId)
+            if (context.UserData.TryGetValue<Applicant>("applicant", out a))
             {
-                case "sms":
-                    a = await GetApplicantByPhone(context.Activity.From.Id.TrimStart('+'));
-                    break;
-                case "skype":
-                case "email":
-                    a = await GetApplicantByEmail(context.Activity.From.Id);
-                    break;
+                // do not simply return the applicant here, as activities in other channels might have changed data. Instead, we just use the cached
+                // applicant as a key to referesh from storage
+                a = await GetApplicantByPhone(a.Phone);
+            }
+            else
+            {
+                switch (context.Activity.ChannelId)
+                {
+                    case "sms":
+                        a = await GetApplicantByPhone(context.Activity.From.Id.TrimStart('+'));
+                        break;
+                    case "skype":
+                    case "email":
+                        a = await GetApplicantByEmail(context.Activity.From.Id);
+                        break;
+                }
             }
             if(a != null) context.UserData.SetValue<Applicant>("applicant", a);
             return a;
