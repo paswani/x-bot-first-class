@@ -58,20 +58,64 @@ namespace X_Bot_First_Class
         /// Schedule an interview.
         /// </summary>
         /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="email">The email of the applicant</param>
         /// <param name="jobId"></param>
-        /// <returns></returns>
+        /// <returns>Awaitable response</returns>
         [HttpGet]
         [Route("api/sms/scheduleinterview")]
-        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string jobId)
+        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string email, string jobId )
+        {
+            return await this.ScheduleInterview(phoneNumber, email, "", jobId, "", "", "");
+        }
+
+
+        /// <summary>
+        /// Schedule an interview.
+        /// </summary>
+        /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="email">The email of the applicant</param>
+        /// <param name="name">Applicant's name</param>
+        /// <param name="jobId"></param>
+        /// <param name="jobTitle">Job Title</param>
+        /// <param name="company">Company</param>
+        /// <returns>Awaitable response</returns>
+        [HttpGet]
+        [Route("api/sms/scheduleinterview")]
+        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string email, string name, string jobId, string jobTitle, string company)
+        {
+            return await this.ScheduleInterview(phoneNumber, email, name, jobId, jobTitle, company, "");
+        }
+
+        /// <summary>
+        /// Schedule an interview.
+        /// </summary>
+        /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="email">The email of the applicant</param>
+        /// <param name="name">Applicant's name</param>
+        /// <param name="jobId"></param>
+        /// <param name="jobTitle">Job Title</param>
+        /// <param name="company">Company</param>
+        /// <param name="jobDescription">Job description</param>
+        /// <returns>Awaitable response</returns>
+        [HttpGet]
+        [Route("api/sms/scheduleinterview")]
+        public async Task<HttpResponseMessage> ScheduleInterview(string phoneNumber, string email, string name, string jobId, string jobTitle, string company, string jobDescription)
         {
             if (string.IsNullOrEmpty(phoneNumber)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(email)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(jobId)) return Request.CreateResponse(HttpStatusCode.BadRequest);
+
 
             // find application
             Application app = null;
             Applicant a = await ApplicantFactory.GetApplicantByPhone(phoneNumber);
-            if (a == null) return Request.CreateResponse(HttpStatusCode.NotFound);
-            if (!a.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
-            app = a.Applications[jobId];
+            if (a == null) a = new Applicant() { Phone = phoneNumber, Email = email, Name = name };
+            if (!a.Applications.Keys.Contains(jobId))
+            {
+                app = new Application() { Id = jobId, Applied = DateTime.Parse("1/1/2017"), State = ConversationType.None, Title = jobTitle, Company = company, Description = jobDescription };
+                a.Applications.Add(jobId, app);
+            }
+            else app = a.Applications[jobId];
 
             if (!phoneNumber.StartsWith("+")) phoneNumber = string.Concat("+", phoneNumber);
             var payload = new MessagePayload()
