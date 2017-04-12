@@ -119,7 +119,7 @@ namespace X_Bot_First_Class.Dialogs
                         {
                             if (value == null) value = 0;
                             var r = new ValidateResult { IsValid = true, Value = value };
-                            if ((Int64)value > 0) r.Feedback = $"Ok, we'll withold an additional ${value} from each paycheck.";
+                            if ((Int64)value > 0) r.Feedback = $"Ok, we'll withhold an additional ${value} from each paycheck.";
                             return r;
                         });
                         var result = await task;
