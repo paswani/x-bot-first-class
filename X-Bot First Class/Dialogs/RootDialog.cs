@@ -107,7 +107,7 @@ namespace X_Bot_First_Class.Dialogs
         private async Task ResumeAfterForward(IDialogContext context, IAwaitable<object> result)
         {
             var message = await result;
-            if (string.IsNullOrEmpty(message?.ToString()))
+            if (string.IsNullOrEmpty(message?.ToString()) || message is ScheduleInterviewForm)
             {
                 context.Wait(MessageReceived);
             }

@@ -104,7 +104,7 @@ namespace X_Bot_First_Class.Dialogs
             await ApplicantFactory.PersistApplicant(a);
             await context.PostAsync($"Please click here to add the invitation to your calendar: http://x-bot-first-class.azurewebsites.net/api/ics?apptDateTime={state.ChoosenDate:s}");
             
-            context.Done<Applicant>(a);
+            context.Done<string>(null);
         }
     }
 }
