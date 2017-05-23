@@ -3,9 +3,7 @@
     <head>
         <title></title>
         <meta charset="utf-8" />
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-                crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script type="text/javascript">
             $(document).ready(() => {
                 $(".scenario0").click((e) => {
@@ -15,7 +13,7 @@
 
                 $(".scenario1 > a").click((e) => {
                     var u = e.target.nodeName.toLowerCase() == "img" ?  e.target.parentElement.href : e.target.href;
-                    u += "&jobId=123456&jobTitle=Master of the Universe&company=Infusion";
+                    u += "?phoneNumber=" + $("#phoneNumber").val() + "&emailAddress=" + $("#emailAddress").val() + "&name=" + $("#name").val() + "&jobId=" + $("#jobId").val() + "&jobTitle=" + $("#jobTitle").val() + "&company=" + $("#company").val();
                     $.get(u, (d) => {
                         alert("Scheduling initiated.");
                         $(".scenario1").hide();
@@ -27,21 +25,21 @@
                 $(".scenario2 > a").click((e) => {
                     var elem = e.target.nodeName.toLowerCase() == "img" ? e.target.parentElement : e.target;
                     var u = elem.href;
-                    u += "&jobId=123456";
+                    u += "?phoneNumber=" + $("#phoneNumber").val() + "&jobId=" + $("#jobId").val();
                     $.get(u, (d) => {
                         alert("Acceptance Notification Delivered.");
                         $(".scenario2").hide();
                         $(".scenario3").show();
                     });
-
                     u = $(elem).attr("rejectionHref");
+                    u += "?email=" + $("#rejectedEmailAddress").val();
                     $.get(u);
                     return false;
                 });
 
                 $(".scenario3 > a").click((e) => {
                     var u = e.target.nodeName.toLowerCase() == "img" ? e.target.parentElement.href : e.target.href;
-                    u += "&jobId=123456";
+                    u += "?phoneNumber=" + $("#phoneNumber").val() + "&jobId=" + $("#jobId").val();
                     $.get(u, (d) => {
                         alert("First Day Review initiated.");
                         $(".scenario3").hide();
@@ -53,28 +51,51 @@
 
         </script>
         <style>
+            .left, .right { display: inline-block; vertical-align: top; }
             .scenario1, .scenario2, .scenario3 { display: none; }
             .scenario1 > a, .scenario2 > a, .scenario3 > a, .scenario4 > a   { display: block; }
         </style>
     </head>
     <body style="font-family:'Segoe UI'">
-        <div class="scenario0">
-            <img src="/Content/Images/0 Welcome.png" />
+        <div class="left">
+            <div class="scenario0">
+                <img src="/Content/Images/0 Welcome.png" />
+            </div>
+            <div class="scenario1">
+                <a href="/api/sms/scheduleinterview">
+                    <img src="/Content/Images/1 Schedule.png" />
+                </a>
+            </div>
+            <div class="scenario2">
+                <a href="/api/sms/applicantaccepted" rejectionHref="/api/email/rejectionNotice">
+                    <img src="/Content/Images/2 Offer.png" />
+                </a>
+            </div>
+            <div class="scenario3">
+                <a href="/api/sms/firstdayreview">
+                    <img src="/Content/Images/3 Satisfaction.png" />
+                </a>
+            </div>
         </div>
-        <div class="scenario1">
-            <a href="/api/sms/scheduleinterview?phoneNumber=15048133964&email=tschueler@infusion.com&name=Zubair Valimohideen">
-                <img src="/Content/Images/1 Schedule.png" />
-            </a>
-        </div>
-        <div class="scenario2">
-            <a href="/api/sms/applicantaccepted?phoneNumber=15048133964" rejectionHref="/api/email/rejectionNotice?email=zvalimohideen@infusion.com">
-                <img src="/Content/Images/2 Offer.png" />
-            </a>
-        </div>
-        <div class="scenario3">
-            <a href="/api/sms/firstdayreview?phoneNumber=15048133964">
-                <img src="/Content/Images/3 Satisfaction.png" />
-            </a>
+        <div class="right">
+            <div>Job Information</div>
+            <input type="text" placeholder="job id" id="jobId" />
+            <br />
+            <input type="text" placeholder="job title" id="jobTitle" />
+            <br />
+            <input type="text" placeholder="company" id="company" />
+            <br />
+            <br />
+            <div>Accepted Candidate</div>
+            <input type="text" placeholder="phone number" id="phoneNumber" />
+            <br />
+            <input type="text" placeholder="email address" id="emailAddress" />
+            <br />
+            <input type="text" placeholder="applicant name" id="name" />
+            <br />
+            <br/>
+            <div>Rejected Candidate</div>
+            <input type="email" placeholder="email address" id="rejectedEmailAddress" />
         </div>
     </body>
 </html>
