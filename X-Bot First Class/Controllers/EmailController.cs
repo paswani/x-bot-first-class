@@ -22,20 +22,56 @@ namespace X_Bot_First_Class
         /// </summary>
         /// <param name="email">The email.</param>
         /// <param name="name">The name.</param>
-        /// <param name="recruiterName">Name of the recruiter.</param>
-        /// <param name="job">The job.</param>
         /// <returns></returns>
         [HttpGet]
         [Route("api/email/rejectionNotice")]
         public async Task<HttpResponseMessage> RejectionNotice(string email, string jobId)
+        {
+            return await RejectionNotice(string.Empty, email, string.Empty, jobId, string.Empty, string.Empty);
+        }
+
+        /// <summary>
+        /// Sends the rejection notice.
+        /// </summary>
+        /// <param name="phoneNumber">The phone number.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="jobId">The job identifier.</param>
+        /// <param name="jobTitle">The job title.</param>
+        /// <param name="company">The company.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/email/rejectionNotice")]
+        public async Task<HttpResponseMessage> RejectionNotice(string phoneNumber, string email, string name, string jobId, string jobTitle, string company)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(jobId)) return Request.CreateResponse(HttpStatusCode.BadRequest);
 
             // find application
             Application app = null;
             Applicant a = await ApplicantFactory.GetApplicantByEmail(email);
-            if (a == null) return Request.CreateResponse(HttpStatusCode.NotFound);
-            if (!a.Applications.Keys.Contains(jobId)) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (a == null)
+            {
+                if (!string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(name))
+                {
+                    a = new Applicant() { Phone = phoneNumber, Email = email, Name = name };
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            if (!a.Applications.Keys.Contains(jobId))
+            {
+                if (!string.IsNullOrEmpty(jobTitle) && !string.IsNullOrEmpty(company))
+                {
+                    app = new Application() { Id = jobId, Applied = DateTime.Parse("1/1/2017"), State = ConversationType.None, Title = jobTitle, Company = company };
+                    a.Applications.Add(jobId, app);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
             app = a.Applications[jobId];
 
             // do job matching
@@ -43,9 +79,9 @@ namespace X_Bot_First_Class
 
             var jobSuggestionHtml = new StringBuilder();
             var filteredJobTitles = jobTitles.Take(3).ToList<string>();
-            foreach(var jobTitle in filteredJobTitles)
+            foreach (var title in filteredJobTitles)
             {
-                jobSuggestionHtml.Append("<li><a href='#'>" + jobTitle + "</a>");
+                jobSuggestionHtml.Append("<li><a href='#'>" + title + "</a>");
             }
 
             // send the email

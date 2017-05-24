@@ -13,7 +13,7 @@
 
                 $(".scenario1 > a").click((e) => {
                     var u = e.target.nodeName.toLowerCase() == "img" ?  e.target.parentElement.href : e.target.href;
-                    u += "?phoneNumber=" + $("#phoneNumber").val() + "&emailAddress=" + $("#emailAddress").val() + "&name=" + $("#name").val() + "&jobId=" + $("#jobId").val() + "&jobTitle=" + $("#jobTitle").val() + "&company=" + $("#company").val();
+                    u += "?phoneNumber=" + $("#phoneNumber").val() + "&email=" + $("#email").val() + "&name=" + $("#name").val() + "&jobId=" + $("#jobId").val() + "&jobTitle=" + $("#jobTitle").val() + "&company=" + $("#company").val();
                     $.get(u, (d) => {
                         alert("Scheduling initiated.");
                         $(".scenario1").hide();
@@ -32,7 +32,7 @@
                         $(".scenario3").show();
                     });
                     u = $(elem).attr("rejectionHref");
-                    u += "?email=" + $("#rejectedEmailAddress").val();
+                    u += "?phoneNumber=" + $("#rejectedPhoneNumber").val() + "&email=" + $("#rejectedEmail").val() + "&name=" + $("#rejectedName").val() + "&jobId=" + $("#jobId").val() + "&jobTitle=" + $("#jobTitle").val() + "&company=" + $("#company").val();
                     $.get(u);
                     return false;
                 });
@@ -89,13 +89,17 @@
             <div>Accepted Candidate</div>
             <input type="text" placeholder="phone number" id="phoneNumber" />
             <br />
-            <input type="text" placeholder="email address" id="emailAddress" />
+            <input type="text" placeholder="email address" id="email" />
             <br />
             <input type="text" placeholder="applicant name" id="name" />
             <br />
             <br/>
             <div>Rejected Candidate</div>
-            <input type="email" placeholder="email address" id="rejectedEmailAddress" />
+            <input type="text" placeholder="phone number" id="rejectedPhoneNumber" />
+            <br />
+            <input type="text" placeholder="email address" id="rejectedEmail" />
+            <br />
+            <input type="text" placeholder="applicant name" id="rejectedName" />
         </div>
     </body>
 </html>
